@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SearchForm from './SearchForm';
 import MultiCityModal from './MultiCityModal';
 
@@ -12,11 +13,18 @@ interface Flight {
 }
 
 const Hero = () => {
+  const navigate = useNavigate();
   const [isMultiCityModalOpen, setIsMultiCityModalOpen] = useState(false);
+
+  const handleSearch = () => {
+    // Navigate to flights page when search is clicked
+    navigate('/flights');
+  };
 
   const handleMultiCitySearch = (flights: Flight[]) => {
     console.log('Multi-city flights:', flights);
-    // Handle the multi-city search, e.g., redirect to search results
+    // Navigate to flights page with multi-city data
+    navigate('/flights');
   };
 
   return (
@@ -42,7 +50,7 @@ const Hero = () => {
           </p>
         </div>
         
-        <SearchForm />
+        <SearchForm onSearch={handleSearch} />
       </div>
       
       {/* Multi-city modal */}

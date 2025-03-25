@@ -35,10 +35,7 @@ const Navbar = () => {
               <span className="ml-1">✈️</span>
             </Link>
             <div className="hidden md:flex space-x-8">
-              <Link to="/" className="text-gray-700 hover:text-primary-600 transition-colors duration-200">Flights</Link>
-              <Link to="/" className="text-gray-700 hover:text-primary-600 transition-colors duration-200">Hotels</Link>
-              <Link to="/" className="text-gray-700 hover:text-primary-600 transition-colors duration-200">Packages</Link>
-              <Link to="/" className="text-gray-700 hover:text-primary-600 transition-colors duration-200">Support</Link>
+              <Link to="/flights" className="text-gray-700 hover:text-primary-600 transition-colors duration-200">Flights</Link>
             </div>
           </div>
           
@@ -96,32 +93,11 @@ const Navbar = () => {
           
           <div className="flex flex-col space-y-6 mb-8">
             <Link 
-              to="/" 
+              to="/flights" 
               className="text-lg text-gray-700 hover:text-primary-600 transition-colors duration-200"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Flights
-            </Link>
-            <Link 
-              to="/" 
-              className="text-lg text-gray-700 hover:text-primary-600 transition-colors duration-200"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Hotels
-            </Link>
-            <Link 
-              to="/" 
-              className="text-lg text-gray-700 hover:text-primary-600 transition-colors duration-200"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Packages
-            </Link>
-            <Link 
-              to="/" 
-              className="text-lg text-gray-700 hover:text-primary-600 transition-colors duration-200"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Support
             </Link>
           </div>
           

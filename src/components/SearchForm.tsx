@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { PlaneIcon, PlaneLanding, Calendar, ArrowLeftRight } from 'lucide-react';
 import PassengerSelector from './PassengerSelector';
@@ -13,6 +12,10 @@ interface AirportOption {
   code: string;
   city: string;
   country: string;
+}
+
+interface SearchFormProps {
+  onSearch: () => void;
 }
 
 // Sample airports data
@@ -32,7 +35,7 @@ const airports: AirportOption[] = [
   { code: 'PNQ', city: 'Pune', country: 'India' },
 ];
 
-const SearchForm = () => {
+const SearchForm = ({ onSearch }: SearchFormProps) => {
   const [tripType, setTripType] = useState<'roundTrip' | 'oneWay' | 'multiCity'>('roundTrip');
   const [from, setFrom] = useState<string>('');
   const [to, setTo] = useState<string>('');
@@ -179,7 +182,8 @@ const SearchForm = () => {
     };
     
     console.log('Search data:', searchData);
-    // Here you would typically handle the search request, e.g. redirect to a search results page
+    // Call the onSearch prop to navigate to the flights page
+    onSearch();
   };
 
   const isReturnVisible = tripType === 'roundTrip';
