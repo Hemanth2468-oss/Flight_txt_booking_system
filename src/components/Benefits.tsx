@@ -5,22 +5,22 @@ const benefits = [
   {
     icon: <ShieldCheck className="w-7 h-7 text-primary-600" />,
     title: 'Best Price Guarantee',
-    description: 'Find a lower price? We'll match it!',
+    description: 'Find a lower price? We\'ll match it!'
   },
   {
     icon: <CreditCard className="w-7 h-7 text-primary-600" />,
     title: 'Secure Booking',
-    description: 'Your data is always protected',
+    description: 'Your data is always protected'
   },
   {
     icon: <Clock className="w-7 h-7 text-primary-600" />,
     title: '24/7 Support',
-    description: 'We're here whenever you need us',
+    description: 'We\'re here whenever you need us'
   },
   {
     icon: <RefreshCcw className="w-7 h-7 text-primary-600" />,
     title: 'Easy Cancellation',
-    description: 'Flexible booking options',
+    description: 'Flexible booking options'
   },
 ];
 
