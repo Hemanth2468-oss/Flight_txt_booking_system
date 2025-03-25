@@ -1,8 +1,9 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchForm from './SearchForm';
 import MultiCityModal from './MultiCityModal';
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog";
 
 interface Flight {
   from: string;
@@ -15,15 +16,48 @@ interface Flight {
 const Hero = () => {
   const navigate = useNavigate();
   const [isMultiCityModalOpen, setIsMultiCityModalOpen] = useState(false);
+  const [isLoginRequired, setIsLoginRequired] = useState(false);
+  const [user, setUser] = useState(null);
+
+  // Check if user is logged in
+  useEffect(() => {
+    const storedUser = localStorage.getItem('flyEliteUser');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   const handleSearch = () => {
-    // Navigate to flights page when search is clicked
-    navigate('/flights');
+    // Check if user is logged in
+    const storedUser = localStorage.getItem('flyEliteUser');
+    
+    if (!storedUser) {
+      // If not logged in, show login dialog
+      setIsLoginRequired(true);
+    } else {
+      // If logged in, navigate to flights page
+      navigate('/flights');
+    }
   };
 
   const handleMultiCitySearch = (flights: Flight[]) => {
     console.log('Multi-city flights:', flights);
-    // Navigate to flights page with multi-city data
+    
+    // Check if user is logged in
+    const storedUser = localStorage.getItem('flyEliteUser');
+    
+    if (!storedUser) {
+      // If not logged in, show login dialog
+      setIsLoginRequired(true);
+    } else {
+      // If logged in, navigate to flights page
+      navigate('/flights');
+    }
+  };
+
+  const handleLoginRedirect = () => {
+    setIsLoginRequired(false);
+    // We'll navigate to flights anyway, but in a real app you might want to handle this differently
     navigate('/flights');
   };
 
@@ -59,6 +93,31 @@ const Hero = () => {
         onClose={() => setIsMultiCityModalOpen(false)}
         onSearch={handleMultiCitySearch}
       />
+
+      {/* Login Required Dialog */}
+      <AlertDialog open={isLoginRequired} onOpenChange={setIsLoginRequired}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Sign in Required</AlertDialogTitle>
+            <AlertDialogDescription>
+              Please sign in to continue with your flight search and booking.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel asChild>
+              <button className="px-4 py-2 text-gray-700 border border-gray-300 rounded-button hover:bg-gray-50">Cancel</button>
+            </AlertDialogCancel>
+            <AlertDialogAction asChild>
+              <button 
+                onClick={handleLoginRedirect}
+                className="px-4 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300"
+              >
+                Continue Anyway
+              </button>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </section>
   );
 };

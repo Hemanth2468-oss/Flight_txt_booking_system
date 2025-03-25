@@ -2,10 +2,65 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Globe, Menu, X } from 'lucide-react';
+import { useToast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// Define form schemas
+const loginSchema = z.object({
+  email: z.string().email({ message: "Please enter a valid email address" }),
+  password: z.string().min(6, { message: "Password must be at least 6 characters" }),
+});
+
+const registerSchema = z.object({
+  firstName: z.string().min(2, { message: "First name must be at least 2 characters" }),
+  lastName: z.string().min(2, { message: "Last name must be at least 2 characters" }),
+  email: z.string().email({ message: "Please enter a valid email address" }),
+  password: z.string().min(6, { message: "Password must be at least 6 characters" }),
+  confirmPassword: z.string().min(6, { message: "Confirm password must be at least 6 characters" }),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
+});
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const { toast } = useToast();
+
+  const loginForm = useForm({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const registerForm = useForm({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,6 +70,68 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Check if user is already logged in from localStorage
+  useEffect(() => {
+    const storedUser = localStorage.getItem('flyEliteUser');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  const handleLogin = (data) => {
+    // In a real app, this would make an API call to authenticate
+    // For now, we'll simulate a successful login
+    const userData = {
+      id: Math.random().toString(36).substr(2, 9),
+      email: data.email,
+      firstName: data.email.split('@')[0],
+      lastName: '',
+    };
+    
+    localStorage.setItem('flyEliteUser', JSON.stringify(userData));
+    setUser(userData);
+    setIsLoginOpen(false);
+    
+    toast({
+      title: "Login successful",
+      description: `Welcome back, ${userData.firstName}!`,
+    });
+
+    loginForm.reset();
+  };
+
+  const handleRegister = (data) => {
+    // In a real app, this would make an API call to register
+    // For now, we'll simulate a successful registration
+    const userData = {
+      id: Math.random().toString(36).substr(2, 9),
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+    };
+    
+    localStorage.setItem('flyEliteUser', JSON.stringify(userData));
+    setUser(userData);
+    setIsRegisterOpen(false);
+    
+    toast({
+      title: "Registration successful",
+      description: `Welcome to Fly Elite, ${data.firstName}!`,
+    });
+
+    registerForm.reset();
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('flyEliteUser');
+    setUser(null);
+    
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out.",
+    });
+  };
 
   return (
     <header 
@@ -44,12 +161,36 @@ const Navbar = () => {
               <Globe className="w-5 h-5" />
               <span>EN</span>
             </button>
-            <button className="px-4 py-2 text-primary-600 hover:bg-primary-50 rounded-button transition-colors duration-200">
-              Sign In
-            </button>
-            <button className="px-4 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300 shadow-sm hover:shadow">
-              Register
-            </button>
+            
+            {user ? (
+              <div className="flex items-center space-x-4">
+                <div className="text-sm text-gray-700">
+                  <span>Welcome, </span>
+                  <span className="font-medium">{user.firstName}</span>
+                </div>
+                <button 
+                  onClick={handleLogout}
+                  className="px-4 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300 shadow-sm hover:shadow"
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <>
+                <button 
+                  onClick={() => setIsLoginOpen(true)}
+                  className="px-4 py-2 text-primary-600 hover:bg-primary-50 rounded-button transition-colors duration-200"
+                >
+                  Sign In
+                </button>
+                <button 
+                  onClick={() => setIsRegisterOpen(true)}
+                  className="px-4 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300 shadow-sm hover:shadow"
+                >
+                  Register
+                </button>
+              </>
+            )}
           </div>
           
           <div className="flex md:hidden">
@@ -102,12 +243,44 @@ const Navbar = () => {
           </div>
           
           <div className="flex flex-col space-y-4 mt-auto">
-            <button className="px-4 py-3 text-primary-600 hover:bg-primary-50 rounded-button transition-colors duration-200 w-full">
-              Sign In
-            </button>
-            <button className="px-4 py-3 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300 w-full shadow-sm hover:shadow">
-              Register
-            </button>
+            {user ? (
+              <>
+                <div className="text-sm text-gray-700 mb-2">
+                  <span>Welcome, </span>
+                  <span className="font-medium">{user.firstName}</span>
+                </div>
+                <button 
+                  onClick={() => {
+                    handleLogout();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="px-4 py-3 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300 w-full shadow-sm hover:shadow"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <>
+                <button 
+                  onClick={() => {
+                    setIsLoginOpen(true);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="px-4 py-3 text-primary-600 hover:bg-primary-50 rounded-button transition-colors duration-200 w-full"
+                >
+                  Sign In
+                </button>
+                <button 
+                  onClick={() => {
+                    setIsRegisterOpen(true);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="px-4 py-3 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300 w-full shadow-sm hover:shadow"
+                >
+                  Register
+                </button>
+              </>
+            )}
             <button className="flex items-center justify-center space-x-2 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-button transition-colors duration-200 w-full mt-4">
               <Globe className="w-5 h-5" />
               <span>English</span>
@@ -115,6 +288,221 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
+      {/* Login Dialog */}
+      <AlertDialog open={isLoginOpen} onOpenChange={setIsLoginOpen}>
+        <AlertDialogContent className="max-w-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-2xl font-bold">Sign In</AlertDialogTitle>
+            <AlertDialogDescription>
+              Enter your credentials to access your account
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          
+          <Form {...loginForm}>
+            <form onSubmit={loginForm.handleSubmit(handleLogin)} className="space-y-4 py-4">
+              <FormField
+                control={loginForm.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <input 
+                        type="email" 
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-primary-500" 
+                        placeholder="your@email.com"
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={loginForm.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <input 
+                        type="password" 
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-primary-500" 
+                        placeholder="******"
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <AlertDialogFooter className="pt-4">
+                <AlertDialogCancel asChild>
+                  <button type="button" className="px-4 py-2 text-gray-700 border border-gray-300 rounded-button hover:bg-gray-50">Cancel</button>
+                </AlertDialogCancel>
+                <AlertDialogAction asChild>
+                  <button type="submit" className="px-4 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300">Sign In</button>
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </form>
+          </Form>
+          
+          <div className="text-center border-t pt-4">
+            <p className="text-sm text-gray-600">
+              Don't have an account?{" "}
+              <button 
+                className="text-primary-600 hover:underline"
+                onClick={() => {
+                  setIsLoginOpen(false);
+                  setIsRegisterOpen(true);
+                }}
+              >
+                Register here
+              </button>
+            </p>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Register Dialog */}
+      <AlertDialog open={isRegisterOpen} onOpenChange={setIsRegisterOpen}>
+        <AlertDialogContent className="max-w-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-2xl font-bold">Create Account</AlertDialogTitle>
+            <AlertDialogDescription>
+              Join Fly Elite to access exclusive deals and faster booking
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          
+          <Form {...registerForm}>
+            <form onSubmit={registerForm.handleSubmit(handleRegister)} className="space-y-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={registerForm.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>First Name</FormLabel>
+                      <FormControl>
+                        <input 
+                          type="text" 
+                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-primary-500" 
+                          placeholder="John"
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={registerForm.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Last Name</FormLabel>
+                      <FormControl>
+                        <input 
+                          type="text" 
+                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-primary-500" 
+                          placeholder="Doe"
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              
+              <FormField
+                control={registerForm.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <input 
+                        type="email" 
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-primary-500" 
+                        placeholder="your@email.com"
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={registerForm.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <input 
+                        type="password" 
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-primary-500" 
+                        placeholder="******"
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={registerForm.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <input 
+                        type="password" 
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-primary-500" 
+                        placeholder="******"
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <AlertDialogFooter className="pt-4">
+                <AlertDialogCancel asChild>
+                  <button type="button" className="px-4 py-2 text-gray-700 border border-gray-300 rounded-button hover:bg-gray-50">Cancel</button>
+                </AlertDialogCancel>
+                <AlertDialogAction asChild>
+                  <button type="submit" className="px-4 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300">Register</button>
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </form>
+          </Form>
+          
+          <div className="text-center border-t pt-4">
+            <p className="text-sm text-gray-600">
+              Already have an account?{" "}
+              <button 
+                className="text-primary-600 hover:underline"
+                onClick={() => {
+                  setIsRegisterOpen(false);
+                  setIsLoginOpen(true);
+                }}
+              >
+                Sign in here
+              </button>
+            </p>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
     </header>
   );
 };

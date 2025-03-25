@@ -4,13 +4,27 @@ import { useLocation } from 'react-router-dom';
 import { ArrowRight, AlertCircle } from 'lucide-react';
 import RegisterModal from './RegisterModal';
 import ConfirmationModal from './ConfirmationModal';
+import { useToast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 
 const FlightResults = () => {
   const location = useLocation();
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+  const [isLoginRequired, setIsLoginRequired] = useState(false);
   const [selectedFlight, setSelectedFlight] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
+  const [user, setUser] = useState(null);
+  const { toast } = useToast();
   
   // Sample flight data
   const flights = [
@@ -47,10 +61,37 @@ const FlightResults = () => {
     }
   ];
 
+  // Check if user is logged in
+  useEffect(() => {
+    const storedUser = localStorage.getItem('flyEliteUser');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
   // Handle booking a flight
   const handleBookFlight = (flight) => {
     setSelectedFlight(flight);
-    setIsRegisterModalOpen(true);
+    
+    // Check if user is logged in
+    if (!user) {
+      setIsLoginRequired(true);
+    } else {
+      // If user is logged in, pre-fill the registration form
+      setUserDetails({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: '',
+        address: '',
+        city: '',
+        country: '',
+        postalCode: '',
+        passport: '',
+        birthDate: ''
+      });
+      setIsRegisterModalOpen(true);
+    }
   };
 
   // Handle completion of registration
@@ -58,6 +99,20 @@ const FlightResults = () => {
     setUserDetails(userData);
     setIsRegisterModalOpen(false);
     setIsConfirmationModalOpen(true);
+    
+    // Simulate sending email
+    setTimeout(() => {
+      toast({
+        title: "E-Ticket Sent",
+        description: `Your e-ticket has been sent to ${userData.email}`,
+      });
+    }, 2000);
+  };
+
+  // Handle login requirement
+  const handleLoginContinue = () => {
+    setIsLoginRequired(false);
+    setIsRegisterModalOpen(true);
   };
 
   return (
@@ -128,11 +183,37 @@ const FlightResults = () => {
         </div>
       )}
       
+      {/* Login Required Dialog */}
+      <AlertDialog open={isLoginRequired} onOpenChange={setIsLoginRequired}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Sign in Required</AlertDialogTitle>
+            <AlertDialogDescription>
+              Please sign in to continue with your flight booking.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel asChild>
+              <button className="px-4 py-2 text-gray-700 border border-gray-300 rounded-button hover:bg-gray-50">Cancel</button>
+            </AlertDialogCancel>
+            <AlertDialogAction asChild>
+              <button 
+                onClick={handleLoginContinue}
+                className="px-4 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300"
+              >
+                Continue as Guest
+              </button>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      
       {isRegisterModalOpen && (
         <RegisterModal 
           onClose={() => setIsRegisterModalOpen(false)}
           onComplete={handleRegistrationComplete}
           flight={selectedFlight}
+          initialData={userDetails}
         />
       )}
       

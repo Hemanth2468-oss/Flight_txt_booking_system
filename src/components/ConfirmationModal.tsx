@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { X, Download, Mail, Check } from 'lucide-react';
 import ETicket from './ETicket';
+import { useToast } from "@/hooks/use-toast";
 
 interface ConfirmationModalProps {
   onClose: () => void;
@@ -12,7 +13,9 @@ interface ConfirmationModalProps {
 const ConfirmationModal = ({ onClose, flight, user }: ConfirmationModalProps) => {
   const [isSending, setIsSending] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const bookingReference = `FE${Math.floor(1000000 + Math.random() * 9000000)}`;
+  const { toast } = useToast();
   
   // Generate e-ticket as PDF and trigger download
   const handleDownloadTicket = () => {
@@ -21,11 +24,15 @@ const ConfirmationModal = ({ onClose, flight, user }: ConfirmationModalProps) =>
     
     // In a real app, you would use a library like jsPDF or html2pdf
     // to generate a PDF. For this demo, we'll simulate it
-    console.log('Downloading e-ticket...');
+    setIsDownloading(true);
     
     // Simulate download delay
     setTimeout(() => {
-      alert('E-ticket downloaded successfully!');
+      setIsDownloading(false);
+      toast({
+        title: "Download Complete",
+        description: "Your e-ticket has been downloaded successfully.",
+      });
     }, 1500);
   };
   
@@ -37,6 +44,22 @@ const ConfirmationModal = ({ onClose, flight, user }: ConfirmationModalProps) =>
     setTimeout(() => {
       setIsSending(false);
       setEmailSent(true);
+      
+      toast({
+        title: "E-Ticket Sent",
+        description: `Your e-ticket has been sent to ${user.email}`,
+      });
+      
+      // Store booking in localStorage
+      const bookings = JSON.parse(localStorage.getItem('flyEliteBookings') || '[]');
+      bookings.push({
+        bookingReference,
+        flight,
+        user,
+        date: new Date().toISOString()
+      });
+      localStorage.setItem('flyEliteBookings', JSON.stringify(bookings));
+      
     }, 2000);
   };
   
@@ -74,10 +97,13 @@ const ConfirmationModal = ({ onClose, flight, user }: ConfirmationModalProps) =>
         <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4">
           <button
             onClick={handleDownloadTicket}
-            className="px-6 py-2 border border-primary-600 text-primary-600 rounded-button hover:bg-primary-50 flex items-center justify-center"
+            disabled={isDownloading}
+            className={`px-6 py-2 border border-primary-600 text-primary-600 rounded-button hover:bg-primary-50 flex items-center justify-center ${
+              isDownloading ? 'opacity-70 cursor-not-allowed' : ''
+            }`}
           >
             <Download className="w-5 h-5 mr-2" />
-            Download E-ticket
+            {isDownloading ? 'Downloading...' : 'Download E-ticket'}
           </button>
           <button
             onClick={handleSendEmail}

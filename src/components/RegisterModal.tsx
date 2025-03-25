@@ -1,14 +1,15 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 
 interface RegisterModalProps {
   onClose: () => void;
   onComplete: (userData: any) => void;
   flight: any;
+  initialData?: any;
 }
 
-const RegisterModal = ({ onClose, onComplete, flight }: RegisterModalProps) => {
+const RegisterModal = ({ onClose, onComplete, flight, initialData }: RegisterModalProps) => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -21,6 +22,16 @@ const RegisterModal = ({ onClose, onComplete, flight }: RegisterModalProps) => {
     passport: '',
     birthDate: ''
   });
+  
+  // If initialData is provided, use it
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        ...formData,
+        ...initialData
+      });
+    }
+  }, [initialData]);
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
