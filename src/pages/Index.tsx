@@ -1,12 +1,34 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { useEffect } from 'react';
+import Navbar from '../components/Navbar';
+import Hero from '../components/Hero';
+import Features from '../components/Features';
+import Destinations from '../components/Destinations';
+import Benefits from '../components/Benefits';
+import AppPromo from '../components/AppPromo';
+import Partners from '../components/Partners';
+import Footer from '../components/Footer';
 
 const Index = () => {
+  // Scroll to top when the component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
+    <div className="flex flex-col min-h-screen bg-white">
+      <Navbar />
+      
+      <main className="flex-grow pt-16">
+        <Hero />
+        <Features />
+        <Destinations />
+        <Benefits />
+        <AppPromo />
+        <Partners />
+      </main>
+      
+      <Footer />
     </div>
   );
 };
