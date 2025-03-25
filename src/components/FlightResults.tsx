@@ -26,38 +26,85 @@ const FlightResults = () => {
   const [user, setUser] = useState(null);
   const { toast } = useToast();
   
-  // Sample flight data
+  // Sample flight data with prices in INR
   const flights = [
     {
       id: 1,
       airline: 'Fly Elite Airways',
       flightNo: 'FE203',
-      departure: { city: 'New York', code: 'JFK', time: '08:30', date: '2023-07-15' },
-      arrival: { city: 'London', code: 'LHR', time: '20:45', date: '2023-07-15' },
-      duration: '7h 15m',
-      price: 499,
-      stops: 0
+      departure: { city: 'New Delhi', code: 'DEL', time: '08:30', date: '2023-07-15' },
+      arrival: { city: 'Mumbai', code: 'BOM', time: '10:45', date: '2023-07-15' },
+      duration: '2h 15m',
+      price: 6999,
+      stops: 0,
+      currency: '₹'
     },
     {
       id: 2,
-      airline: 'Global Airlines',
-      flightNo: 'GA756',
-      departure: { city: 'New York', code: 'JFK', time: '12:15', date: '2023-07-15' },
-      arrival: { city: 'London', code: 'LHR', time: '00:30', date: '2023-07-16' },
-      duration: '7h 15m',
-      price: 452,
-      stops: 0
+      airline: 'Air India',
+      flightNo: 'AI756',
+      departure: { city: 'New Delhi', code: 'DEL', time: '12:15', date: '2023-07-15' },
+      arrival: { city: 'Mumbai', code: 'BOM', time: '14:30', date: '2023-07-15' },
+      duration: '2h 15m',
+      price: 5799,
+      stops: 0,
+      currency: '₹'
     },
     {
       id: 3,
-      airline: 'TransAtlantic',
-      flightNo: 'TA489',
-      departure: { city: 'New York', code: 'JFK', time: '16:45', date: '2023-07-15' },
-      arrival: { city: 'London', code: 'LHR', time: '05:00', date: '2023-07-16' },
-      duration: '7h 15m',
-      price: 475,
+      airline: 'IndiGo',
+      flightNo: 'IN489',
+      departure: { city: 'New Delhi', code: 'DEL', time: '16:45', date: '2023-07-15' },
+      arrival: { city: 'Mumbai', code: 'BOM', time: '19:00', date: '2023-07-15' },
+      duration: '2h 15m',
+      price: 4999,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 4,
+      airline: 'SpiceJet',
+      flightNo: 'SJ324',
+      departure: { city: 'New Delhi', code: 'DEL', time: '06:30', date: '2023-07-15' },
+      arrival: { city: 'Mumbai', code: 'BOM', time: '08:45', date: '2023-07-15' },
+      duration: '2h 15m',
+      price: 5299,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 5,
+      airline: 'Vistara',
+      flightNo: 'VS104',
+      departure: { city: 'New Delhi', code: 'DEL', time: '14:30', date: '2023-07-15' },
+      arrival: { city: 'Mumbai', code: 'BOM', time: '17:00', date: '2023-07-15' },
+      duration: '2h 30m',
+      price: 7299,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 6,
+      airline: 'GoAir',
+      flightNo: 'GA211',
+      departure: { city: 'New Delhi', code: 'DEL', time: '10:15', date: '2023-07-15' },
+      arrival: { city: 'Mumbai', code: 'BOM', time: '12:45', date: '2023-07-15' },
+      duration: '2h 30m',
+      price: 4499,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 7,
+      airline: 'Air India',
+      flightNo: 'AI125',
+      departure: { city: 'New Delhi', code: 'DEL', time: '19:30', date: '2023-07-15' },
+      arrival: { city: 'Mumbai', code: 'BOM', time: '22:15', date: '2023-07-15' },
+      duration: '2h 45m',
+      price: 6799,
       stops: 1,
-      stopInfo: { city: 'Dublin', duration: '1h 30m' }
+      stopInfo: { city: 'Ahmedabad', duration: '45m' },
+      currency: '₹'
     }
   ];
 
@@ -100,13 +147,16 @@ const FlightResults = () => {
     setIsRegisterModalOpen(false);
     setIsConfirmationModalOpen(true);
     
-    // Simulate sending email
-    setTimeout(() => {
-      toast({
-        title: "E-Ticket Sent",
-        description: `Your e-ticket has been sent to ${userData.email}`,
-      });
-    }, 2000);
+    // Store user data in localStorage if not already stored
+    if (!user) {
+      const newUser = {
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email
+      };
+      localStorage.setItem('flyEliteUser', JSON.stringify(newUser));
+      setUser(newUser);
+    }
   };
 
   // Handle login requirement
@@ -168,7 +218,7 @@ const FlightResults = () => {
                   </div>
                   
                   <div className="flex flex-col items-end">
-                    <div className="text-2xl font-bold text-primary-600 mb-2">${flight.price}</div>
+                    <div className="text-2xl font-bold text-primary-600 mb-2">{flight.currency}{flight.price}</div>
                     <button 
                       onClick={() => handleBookFlight(flight)}
                       className="px-6 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300"

@@ -57,7 +57,7 @@ const Hero = () => {
 
   const handleLoginRedirect = () => {
     setIsLoginRequired(false);
-    // We'll navigate to flights anyway, but in a real app you might want to handle this differently
+    // Navigate to flights page
     navigate('/flights');
   };
 
@@ -112,7 +112,7 @@ const Hero = () => {
                 onClick={handleLoginRedirect}
                 className="px-4 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300"
               >
-                Continue Anyway
+                Continue to Flights
               </button>
             </AlertDialogAction>
           </AlertDialogFooter>

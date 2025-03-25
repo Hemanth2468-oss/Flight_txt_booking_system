@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { X, Download, Mail, Check } from 'lucide-react';
 import ETicket from './ETicket';
 import { useToast } from "@/hooks/use-toast";
+import html2pdf from 'html2pdf.js';
 
 interface ConfirmationModalProps {
   onClose: () => void;
@@ -22,18 +23,34 @@ const ConfirmationModal = ({ onClose, flight, user }: ConfirmationModalProps) =>
     const ticketContent = document.getElementById('e-ticket');
     if (!ticketContent) return;
     
-    // In a real app, you would use a library like jsPDF or html2pdf
-    // to generate a PDF. For this demo, we'll simulate it
     setIsDownloading(true);
     
-    // Simulate download delay
-    setTimeout(() => {
-      setIsDownloading(false);
-      toast({
-        title: "Download Complete",
-        description: "Your e-ticket has been downloaded successfully.",
+    // Use html2pdf to generate and download the PDF
+    const opt = {
+      margin: 10,
+      filename: `FlyElite_Ticket_${bookingReference}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    
+    html2pdf().from(ticketContent).set(opt).save()
+      .then(() => {
+        setIsDownloading(false);
+        toast({
+          title: "Download Complete",
+          description: "Your e-ticket has been downloaded as PDF successfully.",
+        });
+      })
+      .catch(err => {
+        setIsDownloading(false);
+        console.error("Error generating PDF:", err);
+        toast({
+          title: "Download Error",
+          description: "There was an error downloading your e-ticket.",
+          variant: "destructive"
+        });
       });
-    }, 1500);
   };
   
   // Send e-ticket to email
@@ -103,7 +120,7 @@ const ConfirmationModal = ({ onClose, flight, user }: ConfirmationModalProps) =>
             }`}
           >
             <Download className="w-5 h-5 mr-2" />
-            {isDownloading ? 'Downloading...' : 'Download E-ticket'}
+            {isDownloading ? 'Downloading PDF...' : 'Download E-ticket (PDF)'}
           </button>
           <button
             onClick={handleSendEmail}
