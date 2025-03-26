@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Globe, Menu, X, Plane } from 'lucide-react';
+import { Globe, Menu, X, Plane, Tag, CheckSquare } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import {
   AlertDialog,
@@ -33,12 +33,20 @@ const registerSchema = z.object({
   path: ["confirmPassword"],
 });
 
+const checkInSchema = z.object({
+  bookingReference: z.string().min(6, { message: "Booking reference must be at least 6 characters" }),
+  lastName: z.string().min(2, { message: "Last name must be at least 2 characters" }),
+});
+
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [isCheckInOpen, setIsCheckInOpen] = useState(false);
+  const [isOffersOpen, setIsOffersOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [checkInResult, setCheckInResult] = useState(null);
   const { toast } = useToast();
 
   const loginForm = useForm({
@@ -57,6 +65,14 @@ const Navbar = () => {
       email: "",
       password: "",
       confirmPassword: "",
+    },
+  });
+
+  const checkInForm = useForm({
+    resolver: zodResolver(checkInSchema),
+    defaultValues: {
+      bookingReference: "",
+      lastName: "",
     },
   });
 
@@ -126,6 +142,26 @@ const Navbar = () => {
     });
   };
 
+  const handleCheckIn = (data) => {
+    const mockFlightData = {
+      passengerName: `${data.lastName}, John`,
+      flightNo: 'FE203',
+      departure: { city: 'New Delhi', code: 'DEL', time: '08:30', date: '2023-07-15' },
+      arrival: { city: 'Mumbai', code: 'BOM', time: '10:45', date: '2023-07-15' },
+      gate: 'B12',
+      seat: '14A',
+      boardingTime: '08:00',
+      status: 'On Time'
+    };
+    
+    setCheckInResult(mockFlightData);
+    
+    toast({
+      title: "Check-in successful",
+      description: `Boarding pass ready for ${mockFlightData.passengerName}`,
+    });
+  };
+
   return (
     <header 
       className={`fixed w-full z-50 transition-all duration-300 ${
@@ -142,10 +178,21 @@ const Navbar = () => {
               className="text-2xl font-pacifico text-primary-600 transition-transform duration-300 transform hover:scale-105 flex items-center"
             >
               Fly Elite
-              <Plane className="ml-2 h-5 w-5 text-primary-600 transform -rotate-45" />
+              <Plane className="ml-2 h-5 w-5 text-primary-600 transform rotate-45" />
             </Link>
             <div className="hidden md:flex space-x-8">
               <Link to="/flights" className="text-gray-700 hover:text-primary-600 transition-colors duration-200">Flights</Link>
+              <Link to="/deals" className="text-gray-700 hover:text-primary-600 transition-colors duration-200 flex items-center">
+                <Tag className="mr-1 h-4 w-4" />
+                Deals & Offers
+              </Link>
+              <button 
+                onClick={() => setIsCheckInOpen(true)}
+                className="text-gray-700 hover:text-primary-600 transition-colors duration-200 flex items-center"
+              >
+                <CheckSquare className="mr-1 h-4 w-4" />
+                Check-in
+              </button>
             </div>
           </div>
           
@@ -163,7 +210,7 @@ const Navbar = () => {
                 </div>
                 <button 
                   onClick={handleLogout}
-                  className="px-4 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300 shadow-sm hover:shadow"
+                  className="px-4 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300 shadow-sm hover:shadow glow-button"
                 >
                   Sign Out
                 </button>
@@ -178,7 +225,7 @@ const Navbar = () => {
                 </button>
                 <button 
                   onClick={() => setIsRegisterOpen(true)}
-                  className="px-4 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300 shadow-sm hover:shadow"
+                  className="px-4 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300 shadow-sm hover:shadow glow-button"
                 >
                   Register
                 </button>
@@ -214,7 +261,7 @@ const Navbar = () => {
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Fly Elite
-              <span className="ml-1">✈️</span>
+              <Plane className="ml-2 h-5 w-5 text-primary-600 transform rotate-45 inline-block" />
             </Link>
             <button 
               onClick={() => setIsMobileMenuOpen(false)}
@@ -232,6 +279,24 @@ const Navbar = () => {
             >
               Flights
             </Link>
+            <Link 
+              to="/deals" 
+              className="text-lg text-gray-700 hover:text-primary-600 transition-colors duration-200 flex items-center"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <Tag className="mr-2 h-5 w-5" />
+              Deals & Offers
+            </Link>
+            <button 
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                setIsCheckInOpen(true);
+              }}
+              className="text-lg text-gray-700 hover:text-primary-600 transition-colors duration-200 flex items-center"
+            >
+              <CheckSquare className="mr-2 h-5 w-5" />
+              Check-in
+            </button>
           </div>
           
           <div className="flex flex-col space-y-4 mt-auto">
@@ -246,7 +311,7 @@ const Navbar = () => {
                     handleLogout();
                     setIsMobileMenuOpen(false);
                   }}
-                  className="px-4 py-3 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300 w-full shadow-sm hover:shadow"
+                  className="px-4 py-3 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300 w-full shadow-sm hover:shadow glow-button"
                 >
                   Sign Out
                 </button>
@@ -267,7 +332,7 @@ const Navbar = () => {
                     setIsRegisterOpen(true);
                     setIsMobileMenuOpen(false);
                   }}
-                  className="px-4 py-3 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300 w-full shadow-sm hover:shadow"
+                  className="px-4 py-3 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300 w-full shadow-sm hover:shadow glow-button"
                 >
                   Register
                 </button>
@@ -493,8 +558,134 @@ const Navbar = () => {
           </div>
         </AlertDialogContent>
       </AlertDialog>
+
+      <AlertDialog open={isCheckInOpen} onOpenChange={setIsCheckInOpen}>
+        <AlertDialogContent className="max-w-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-2xl font-bold">Online Check-in</AlertDialogTitle>
+            <AlertDialogDescription>
+              Enter your booking reference and last name to check in for your flight
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          
+          {!checkInResult ? (
+            <Form {...checkInForm}>
+              <form onSubmit={checkInForm.handleSubmit(handleCheckIn)} className="space-y-4 py-4">
+                <FormField
+                  control={checkInForm.control}
+                  name="bookingReference"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Booking Reference / PNR</FormLabel>
+                      <FormControl>
+                        <input 
+                          type="text" 
+                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-primary-500" 
+                          placeholder="ABCDEF"
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={checkInForm.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Last Name</FormLabel>
+                      <FormControl>
+                        <input 
+                          type="text" 
+                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-primary-500" 
+                          placeholder="Doe"
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <AlertDialogFooter className="pt-4">
+                  <AlertDialogCancel asChild>
+                    <button type="button" className="px-4 py-2 text-gray-700 border border-gray-300 rounded-button hover:bg-gray-50">Cancel</button>
+                  </AlertDialogCancel>
+                  <AlertDialogAction asChild>
+                    <button type="submit" className="px-4 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300 glow-button">Check In</button>
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </form>
+            </Form>
+          ) : (
+            <div className="py-4">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-green-700 font-medium">Check-in Successful</span>
+                  <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium">{checkInResult.status}</span>
+                </div>
+                <h3 className="font-bold text-lg">{checkInResult.passengerName}</h3>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="flex justify-between">
+                  <div>
+                    <p className="text-sm text-gray-500">Flight</p>
+                    <p className="font-medium">{checkInResult.flightNo}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Seat</p>
+                    <p className="font-medium">{checkInResult.seat}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Gate</p>
+                    <p className="font-medium">{checkInResult.gate}</p>
+                  </div>
+                </div>
+                
+                <div className="flex justify-between border-t border-b py-3">
+                  <div>
+                    <p className="text-sm text-gray-500">From</p>
+                    <p className="font-medium">{checkInResult.departure.city} ({checkInResult.departure.code})</p>
+                    <p className="text-sm">{checkInResult.departure.time}</p>
+                  </div>
+                  <div className="text-center self-center">
+                    <Plane className="h-5 w-5 mx-auto text-primary-600 transform rotate-45" />
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-gray-500">To</p>
+                    <p className="font-medium">{checkInResult.arrival.city} ({checkInResult.arrival.code})</p>
+                    <p className="text-sm">{checkInResult.arrival.time}</p>
+                  </div>
+                </div>
+                
+                <div>
+                  <p className="text-sm text-gray-500">Boarding Time</p>
+                  <p className="font-medium">{checkInResult.boardingTime}</p>
+                </div>
+              </div>
+              
+              <div className="mt-6">
+                <button 
+                  className="w-full py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300 glow-button"
+                  onClick={() => {
+                    setCheckInResult(null);
+                    setIsCheckInOpen(false);
+                    checkInForm.reset();
+                  }}
+                >
+                  Download Boarding Pass
+                </button>
+              </div>
+            </div>
+          )}
+        </AlertDialogContent>
+      </AlertDialog>
     </header>
   );
 };
 
 export default Navbar;
+
