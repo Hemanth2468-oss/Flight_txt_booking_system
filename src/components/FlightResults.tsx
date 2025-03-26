@@ -614,4 +614,4 @@ const FlightResults = () => {
       airline: 'IndiGo',
       flightNo: 'IN652',
       departure: { city: 'Singapore', code: 'SIN', time: '08:15', date: '2023-07-15' },
-      arrival: { city: 'New Delhi', code
+      arrival: { city: 'New Delhi', code: 'DEL
