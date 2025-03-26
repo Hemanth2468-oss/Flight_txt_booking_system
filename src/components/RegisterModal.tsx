@@ -5,7 +5,7 @@ import { X } from 'lucide-react';
 interface RegisterModalProps {
   onClose: () => void;
   onComplete: (userData: any) => void;
-  flight: any;
+  flight?: any; // Make flight optional
   initialData?: any;
 }
 
@@ -56,35 +56,43 @@ const RegisterModal = ({ onClose, onComplete, flight, initialData }: RegisterMod
           </button>
         </div>
         
-        <div className="mb-6">
-          <div className="bg-primary-50 rounded-lg p-4 mb-4">
-            <h3 className="font-semibold text-lg mb-2">Flight Details</h3>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-gray-600">From</p>
-                <p className="font-medium">{flight.departure.city} ({flight.departure.code})</p>
+        {flight && (
+          <div className="mb-6">
+            <div className="bg-primary-50 rounded-lg p-4 mb-4">
+              <h3 className="font-semibold text-lg mb-2">Flight Details</h3>
+              <div className="grid grid-cols-2 gap-4">
+                {flight.departure && (
+                  <div>
+                    <p className="text-sm text-gray-600">From</p>
+                    <p className="font-medium">{flight.departure.city} ({flight.departure.code})</p>
+                  </div>
+                )}
+                {flight.arrival && (
+                  <div>
+                    <p className="text-sm text-gray-600">To</p>
+                    <p className="font-medium">{flight.arrival.city} ({flight.arrival.code})</p>
+                  </div>
+                )}
+                {flight.departure && (
+                  <div>
+                    <p className="text-sm text-gray-600">Date</p>
+                    <p className="font-medium">{flight.departure.date}</p>
+                  </div>
+                )}
+                <div>
+                  <p className="text-sm text-gray-600">Flight</p>
+                  <p className="font-medium">{flight.airline} • {flight.flightNo}</p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-gray-600">To</p>
-                <p className="font-medium">{flight.arrival.city} ({flight.arrival.code})</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Date</p>
-                <p className="font-medium">{flight.departure.date}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Flight</p>
-                <p className="font-medium">{flight.airline} • {flight.flightNo}</p>
-              </div>
-            </div>
-            <div className="mt-2 border-t pt-2">
-              <div className="flex justify-between">
-                <p className="font-medium">Total Price</p>
-                <p className="font-bold text-primary-600">${flight.price}</p>
+              <div className="mt-2 border-t pt-2">
+                <div className="flex justify-between">
+                  <p className="font-medium">Total Price</p>
+                  <p className="font-bold text-primary-600">${flight.price}</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
         
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
