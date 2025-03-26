@@ -56,7 +56,7 @@ const ETicket = ({ flight, user, bookingReference }: ETicketProps) => {
                 <Plane className="w-5 h-5 text-primary-600 mr-3" />
                 <div>
                   <p className="text-sm text-gray-600">Flight</p>
-                  <p className="font-medium">{flight.airline || 'N/A'} • {flight.flightNo || 'N/A'}</p>
+                  <p className="font-medium">{flight?.airline || 'N/A'} • {flight?.flightNo || 'N/A'}</p>
                 </div>
               </div>
               {flight.departure && (
@@ -94,7 +94,7 @@ const ETicket = ({ flight, user, bookingReference }: ETicketProps) => {
                 <User className="w-5 h-5 text-primary-600 mr-3" />
                 <div>
                   <p className="text-sm text-gray-600">Passenger</p>
-                  <p className="font-medium">{user.firstName || ''} {user.lastName || ''}</p>
+                  <p className="font-medium">{user?.firstName || ''} {user?.lastName || ''}</p>
                 </div>
               </div>
               {flight.departure && (
@@ -136,7 +136,7 @@ const ETicket = ({ flight, user, bookingReference }: ETicketProps) => {
             </div>
             <div className="text-right">
               <p className="text-sm text-gray-600">Total Paid</p>
-              <p className="font-bold text-primary-600">${flight.price || 'N/A'}</p>
+              <p className="font-bold text-primary-600">${flight?.price || 'N/A'}</p>
             </div>
           </div>
         </div>
