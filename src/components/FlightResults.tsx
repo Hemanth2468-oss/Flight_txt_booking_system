@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, AlertCircle } from 'lucide-react';
@@ -29,7 +30,6 @@ interface SearchData {
   cabinClass: string;
 }
 
-// Making sure we export this component as default
 const FlightResults = () => {
   const navigate = useNavigate();
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
@@ -614,4 +614,136 @@ const FlightResults = () => {
       airline: 'IndiGo',
       flightNo: 'IN652',
       departure: { city: 'Singapore', code: 'SIN', time: '08:15', date: '2023-07-15' },
-      arrival: { city: 'New Delhi', code: 'DEL
+      arrival: { city: 'New Delhi', code: 'DEL', time: '11:30', date: '2023-07-15' },
+      duration: '3h 15m',
+      price: 15999,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 53,
+      airline: 'Air Asia',
+      flightNo: 'AA471',
+      departure: { city: 'Kuala Lumpur', code: 'KUL', time: '09:30', date: '2023-07-15' },
+      arrival: { city: 'Bangkok', code: 'BKK', time: '11:00', date: '2023-07-15' },
+      duration: '1h 30m',
+      price: 8999,
+      stops: 0,
+      currency: '₹'
+    }
+  ];
+
+  useEffect(() => {
+    // Set displayed flights to all flights when component mounts
+    setDisplayedFlights(allFlights);
+  }, []);
+
+  return (
+    <div className="container mx-auto px-4 pb-8">
+      <h1 className="text-2xl font-bold mb-4">Flight Results</h1>
+      <p className="mb-6">Showing {displayedFlights.length} flights</p>
+      
+      <div className="space-y-4">
+        {displayedFlights.map((flight) => (
+          <div 
+            key={flight.id} 
+            className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow"
+          >
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div>
+                <p className="font-medium text-lg">{flight.airline}</p>
+                <p className="text-gray-500">{flight.flightNo}</p>
+              </div>
+              
+              <div className="flex-1 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div className="text-center">
+                  <p className="font-medium">{flight.departure.time}</p>
+                  <p className="text-sm text-gray-500">{flight.departure.code}</p>
+                </div>
+                
+                <div className="flex flex-col items-center">
+                  <p className="text-xs text-gray-500">{flight.duration}</p>
+                  <div className="relative w-20 md:w-32 h-px bg-gray-300 my-2">
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-primary rounded-full"></div>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    {flight.stops === 0 ? 'Direct' : `${flight.stops} Stop${flight.stops > 1 ? 's' : ''}`}
+                  </p>
+                </div>
+                
+                <div className="text-center">
+                  <p className="font-medium">{flight.arrival.time}</p>
+                  <p className="text-sm text-gray-500">{flight.arrival.code}</p>
+                </div>
+              </div>
+              
+              <div className="text-right">
+                <p className="font-bold text-lg">{flight.currency} {flight.price}</p>
+                <button 
+                  className="mt-2 bg-primary text-white px-4 py-2 rounded flex items-center justify-center gap-1 hover:bg-primary/90 transition-colors"
+                  onClick={() => {
+                    setSelectedFlight(flight);
+                    setIsRegisterModalOpen(true);
+                  }}
+                >
+                  Book <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      {displayedFlights.length === 0 && (
+        <div className="flex flex-col items-center justify-center py-16">
+          <AlertCircle className="h-16 w-16 text-yellow-500 mb-4" />
+          <h3 className="text-xl font-medium mb-2">No Flights Found</h3>
+          <p className="text-gray-500 text-center">
+            We couldn't find any flights matching your search criteria.
+            <br />
+            Please try adjusting your search parameters.
+          </p>
+        </div>
+      )}
+
+      <RegisterModal 
+        isOpen={isRegisterModalOpen} 
+        onClose={() => setIsRegisterModalOpen(false)}
+        onSuccess={(details) => {
+          setUserDetails(details);
+          setIsRegisterModalOpen(false);
+          setIsConfirmationModalOpen(true);
+        }}
+      />
+      
+      <ConfirmationModal
+        isOpen={isConfirmationModalOpen}
+        onClose={() => setIsConfirmationModalOpen(false)}
+        flightDetails={selectedFlight}
+        userDetails={userDetails}
+      />
+      
+      <AlertDialog open={isLoginRequired}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Login Required</AlertDialogTitle>
+            <AlertDialogDescription>
+              You need to be logged in to book a flight. Please log in or create an account to continue.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setIsLoginRequired(false)}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={() => {
+              setIsLoginRequired(false);
+              setIsRegisterModalOpen(true);
+            }}>
+              Login
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  );
+};
+
+export default FlightResults;
