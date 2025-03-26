@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, AlertCircle } from 'lucide-react';
@@ -42,8 +41,9 @@ const FlightResults = () => {
   const [displayedFlights, setDisplayedFlights] = useState([]);
   const { toast } = useToast();
   
-  // Sample flight data with prices in INR
+  // Expanded flight data with prices in INR and more airlines
   const allFlights = [
+    // Original flights
     {
       id: 1,
       airline: 'Fly Elite Airways',
@@ -122,7 +122,6 @@ const FlightResults = () => {
       stopInfo: { city: 'Ahmedabad', duration: '45m' },
       currency: '₹'
     },
-    // Add more flight routes
     {
       id: 8,
       airline: 'Fly Elite Airways',
@@ -188,6 +187,415 @@ const FlightResults = () => {
       price: 5299,
       stops: 0,
       currency: '₹'
+    },
+    
+    // New flights with popular airlines
+    {
+      id: 14,
+      airline: 'IndiGo',
+      flightNo: 'IN501',
+      departure: { city: 'Mumbai', code: 'BOM', time: '06:15', date: '2023-07-15' },
+      arrival: { city: 'New Delhi', code: 'DEL', time: '08:30', date: '2023-07-15' },
+      duration: '2h 15m',
+      price: 5499,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 15,
+      airline: 'Vistara',
+      flightNo: 'VS202',
+      departure: { city: 'Mumbai', code: 'BOM', time: '09:45', date: '2023-07-15' },
+      arrival: { city: 'New Delhi', code: 'DEL', time: '12:00', date: '2023-07-15' },
+      duration: '2h 15m',
+      price: 7799,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 16,
+      airline: 'Air India',
+      flightNo: 'AI308',
+      departure: { city: 'Mumbai', code: 'BOM', time: '12:30', date: '2023-07-15' },
+      arrival: { city: 'New Delhi', code: 'DEL', time: '14:45', date: '2023-07-15' },
+      duration: '2h 15m',
+      price: 6299,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 17,
+      airline: 'Emirates',
+      flightNo: 'EK507',
+      departure: { city: 'Mumbai', code: 'BOM', time: '23:15', date: '2023-07-15' },
+      arrival: { city: 'Dubai', code: 'DXB', time: '01:30', date: '2023-07-16' },
+      duration: '3h 15m',
+      price: 28999,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 18,
+      airline: 'Qatar Airways',
+      flightNo: 'QR553',
+      departure: { city: 'Mumbai', code: 'BOM', time: '22:30', date: '2023-07-15' },
+      arrival: { city: 'Doha', code: 'DOH', time: '00:15', date: '2023-07-16' },
+      duration: '3h 45m',
+      price: 31499,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 19,
+      airline: 'IndiGo',
+      flightNo: 'IN623',
+      departure: { city: 'Bengaluru', code: 'BLR', time: '07:30', date: '2023-07-15' },
+      arrival: { city: 'New Delhi', code: 'DEL', time: '10:15', date: '2023-07-15' },
+      duration: '2h 45m',
+      price: 5899,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 20,
+      airline: 'SpiceJet',
+      flightNo: 'SJ418',
+      departure: { city: 'Bengaluru', code: 'BLR', time: '15:45', date: '2023-07-15' },
+      arrival: { city: 'New Delhi', code: 'DEL', time: '18:30', date: '2023-07-15' },
+      duration: '2h 45m',
+      price: 5399,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 21,
+      airline: 'Vistara',
+      flightNo: 'VS311',
+      departure: { city: 'Bengaluru', code: 'BLR', time: '10:30', date: '2023-07-15' },
+      arrival: { city: 'Mumbai', code: 'BOM', time: '12:15', date: '2023-07-15' },
+      duration: '1h 45m',
+      price: 4899,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 22,
+      airline: 'Air India',
+      flightNo: 'AI512',
+      departure: { city: 'Chennai', code: 'MAA', time: '08:45', date: '2023-07-15' },
+      arrival: { city: 'Mumbai', code: 'BOM', time: '10:45', date: '2023-07-15' },
+      duration: '2h 00m',
+      price: 5099,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 23,
+      airline: 'Emirates',
+      flightNo: 'EK543',
+      departure: { city: 'New Delhi', code: 'DEL', time: '21:45', date: '2023-07-15' },
+      arrival: { city: 'Dubai', code: 'DXB', time: '00:15', date: '2023-07-16' },
+      duration: '3h 30m',
+      price: 27499,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 24,
+      airline: 'Qatar Airways',
+      flightNo: 'QR579',
+      departure: { city: 'New Delhi', code: 'DEL', time: '20:30', date: '2023-07-15' },
+      arrival: { city: 'Doha', code: 'DOH', time: '22:45', date: '2023-07-15' },
+      duration: '4h 15m',
+      price: 30999,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 25,
+      airline: 'IndiGo',
+      flightNo: 'IN705',
+      departure: { city: 'Hyderabad', code: 'HYD', time: '06:30', date: '2023-07-15' },
+      arrival: { city: 'New Delhi', code: 'DEL', time: '09:00', date: '2023-07-15' },
+      duration: '2h 30m',
+      price: 5799,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 26,
+      airline: 'Vistara',
+      flightNo: 'VS422',
+      departure: { city: 'Kolkata', code: 'CCU', time: '11:15', date: '2023-07-15' },
+      arrival: { city: 'Mumbai', code: 'BOM', time: '14:00', date: '2023-07-15' },
+      duration: '2h 45m',
+      price: 6799,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 27,
+      airline: 'SpiceJet',
+      flightNo: 'SJ530',
+      departure: { city: 'Chennai', code: 'MAA', time: '13:45', date: '2023-07-15' },
+      arrival: { city: 'Bengaluru', code: 'BLR', time: '14:45', date: '2023-07-15' },
+      duration: '1h 00m',
+      price: 3599,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 28,
+      airline: 'Air India',
+      flightNo: 'AI631',
+      departure: { city: 'Kolkata', code: 'CCU', time: '09:30', date: '2023-07-15' },
+      arrival: { city: 'New Delhi', code: 'DEL', time: '12:00', date: '2023-07-15' },
+      duration: '2h 30m',
+      price: 6199,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 29,
+      airline: 'IndiGo',
+      flightNo: 'IN814',
+      departure: { city: 'Goa', code: 'GOI', time: '10:15', date: '2023-07-15' },
+      arrival: { city: 'Mumbai', code: 'BOM', time: '11:30', date: '2023-07-15' },
+      duration: '1h 15m',
+      price: 4299,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 30,
+      airline: 'Vistara',
+      flightNo: 'VS507',
+      departure: { city: 'Mumbai', code: 'BOM', time: '18:30', date: '2023-07-15' },
+      arrival: { city: 'Bengaluru', code: 'BLR', time: '20:15', date: '2023-07-15' },
+      duration: '1h 45m',
+      price: 4999,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 31,
+      airline: 'Emirates',
+      flightNo: 'EK585',
+      departure: { city: 'Bengaluru', code: 'BLR', time: '22:15', date: '2023-07-15' },
+      arrival: { city: 'Dubai', code: 'DXB', time: '01:30', date: '2023-07-16' },
+      duration: '4h 15m',
+      price: 29999,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 32,
+      airline: 'Qatar Airways',
+      flightNo: 'QR624',
+      departure: { city: 'Bengaluru', code: 'BLR', time: '21:45', date: '2023-07-15' },
+      arrival: { city: 'Doha', code: 'DOH', time: '00:45', date: '2023-07-16' },
+      duration: '4h 00m',
+      price: 32499,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 33,
+      airline: 'Air India',
+      flightNo: 'AI753',
+      departure: { city: 'Hyderabad', code: 'HYD', time: '12:30', date: '2023-07-15' },
+      arrival: { city: 'Mumbai', code: 'BOM', time: '14:15', date: '2023-07-15' },
+      duration: '1h 45m',
+      price: 4799,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 34,
+      airline: 'SpiceJet',
+      flightNo: 'SJ641',
+      departure: { city: 'Pune', code: 'PNQ', time: '07:15', date: '2023-07-15' },
+      arrival: { city: 'New Delhi', code: 'DEL', time: '09:45', date: '2023-07-15' },
+      duration: '2h 30m',
+      price: 5599,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 35,
+      airline: 'IndiGo',
+      flightNo: 'IN925',
+      departure: { city: 'Mumbai', code: 'BOM', time: '15:30', date: '2023-07-15' },
+      arrival: { city: 'Chennai', code: 'MAA', time: '17:30', date: '2023-07-15' },
+      duration: '2h 00m',
+      price: 4699,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 36,
+      airline: 'Fly Elite Airways',
+      flightNo: 'FE405',
+      departure: { city: 'Mumbai', code: 'BOM', time: '16:45', date: '2023-07-15' },
+      arrival: { city: 'Kolkata', code: 'CCU', time: '19:30', date: '2023-07-15' },
+      duration: '2h 45m',
+      price: 7299,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 37,
+      airline: 'Vistara',
+      flightNo: 'VS608',
+      departure: { city: 'New Delhi', code: 'DEL', time: '07:45', date: '2023-07-15' },
+      arrival: { city: 'Goa', code: 'GOI', time: '10:30', date: '2023-07-15' },
+      duration: '2h 45m',
+      price: 6999,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 38,
+      airline: 'Air India',
+      flightNo: 'AI862',
+      departure: { city: 'New Delhi', code: 'DEL', time: '09:15', date: '2023-07-15' },
+      arrival: { city: 'Bengaluru', code: 'BLR', time: '12:00', date: '2023-07-15' },
+      duration: '2h 45m',
+      price: 5999,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 39,
+      airline: 'Emirates',
+      flightNo: 'EK612',
+      departure: { city: 'Chennai', code: 'MAA', time: '23:00', date: '2023-07-15' },
+      arrival: { city: 'Dubai', code: 'DXB', time: '02:15', date: '2023-07-16' },
+      duration: '4h 15m',
+      price: 28499,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 40,
+      airline: 'Qatar Airways',
+      flightNo: 'QR683',
+      departure: { city: 'Hyderabad', code: 'HYD', time: '21:30', date: '2023-07-15' },
+      arrival: { city: 'Doha', code: 'DOH', time: '00:45', date: '2023-07-16' },
+      duration: '4h 15m',
+      price: 31999,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 41,
+      airline: 'IndiGo',
+      flightNo: 'IN1027',
+      departure: { city: 'Bengaluru', code: 'BLR', time: '19:45', date: '2023-07-15' },
+      arrival: { city: 'Hyderabad', code: 'HYD', time: '21:00', date: '2023-07-15' },
+      duration: '1h 15m',
+      price: 3899,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 42,
+      airline: 'SpiceJet',
+      flightNo: 'SJ742',
+      departure: { city: 'New Delhi', code: 'DEL', time: '11:30', date: '2023-07-15' },
+      arrival: { city: 'Kolkata', code: 'CCU', time: '14:00', date: '2023-07-15' },
+      duration: '2h 30m',
+      price: 5199,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 43,
+      airline: 'Vistara',
+      flightNo: 'VS715',
+      departure: { city: 'Chennai', code: 'MAA', time: '16:15', date: '2023-07-15' },
+      arrival: { city: 'New Delhi', code: 'DEL', time: '19:00', date: '2023-07-15' },
+      duration: '2h 45m',
+      price: 6499,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 44,
+      airline: 'Air India',
+      flightNo: 'AI971',
+      departure: { city: 'Kochi', code: 'COK', time: '08:00', date: '2023-07-15' },
+      arrival: { city: 'Mumbai', code: 'BOM', time: '10:00', date: '2023-07-15' },
+      duration: '2h 00m',
+      price: 5399,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 45,
+      airline: 'Fly Elite Airways',
+      flightNo: 'FE518',
+      departure: { city: 'New Delhi', code: 'DEL', time: '17:30', date: '2023-07-15' },
+      arrival: { city: 'Pune', code: 'PNQ', time: '19:45', date: '2023-07-15' },
+      duration: '2h 15m',
+      price: 5899,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 46,
+      airline: 'IndiGo',
+      flightNo: 'IN1131',
+      departure: { city: 'Kochi', code: 'COK', time: '14:30', date: '2023-07-15' },
+      arrival: { city: 'Bengaluru', code: 'BLR', time: '15:30', date: '2023-07-15' },
+      duration: '1h 00m',
+      price: 3499,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 47,
+      airline: 'Emirates',
+      flightNo: 'EK647',
+      departure: { city: 'Kolkata', code: 'CCU', time: '22:45', date: '2023-07-15' },
+      arrival: { city: 'Dubai', code: 'DXB', time: '02:30', date: '2023-07-16' },
+      duration: '4h 45m',
+      price: 29499,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 48,
+      airline: 'Qatar Airways',
+      flightNo: 'QR741',
+      departure: { city: 'Mumbai', code: 'BOM', time: '01:30', date: '2023-07-15' },
+      arrival: { city: 'Doha', code: 'DOH', time: '03:15', date: '2023-07-15' },
+      duration: '3h 45m',
+      price: 30499,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 49,
+      airline: 'Vistara',
+      flightNo: 'VS824',
+      departure: { city: 'Pune', code: 'PNQ', time: '13:15', date: '2023-07-15' },
+      arrival: { city: 'Bengaluru', code: 'BLR', time: '14:45', date: '2023-07-15' },
+      duration: '1h 30m',
+      price: 4299,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 50,
+      airline: 'Air India',
+      flightNo: 'AI1082',
+      departure: { city: 'Hyderabad', code: 'HYD', time: '18:45', date: '2023-07-15' },
+      arrival: { city: 'Kolkata', code: 'CCU', time: '21:15', date: '2023-07-15' },
+      duration: '2h 30m',
+      price: 5799,
+      stops: 0,
+      currency: '₹'
     }
   ];
 
@@ -216,238 +624,4 @@ const FlightResults = () => {
       // If no search data, redirect back to home
       toast({
         title: "No Search Data",
-        description: "Please search for flights from the home page.",
-        variant: "destructive"
-      });
-      setTimeout(() => navigate('/'), 2000);
-    }
-  }, [navigate, toast]);
-
-  // Filter flights based on search criteria
-  const filterFlights = (searchData) => {
-    if (!searchData || !searchData.from || !searchData.to) {
-      setDisplayedFlights(allFlights);
-      return;
-    }
-    
-    // Filter flights based on from and to locations
-    let filtered = allFlights.filter(flight => 
-      flight.departure.code === searchData.from.code && 
-      flight.arrival.code === searchData.to.code
-    );
-    
-    // If no flights found with the exact route, show flights from the same departure city
-    if (filtered.length === 0) {
-      filtered = allFlights.filter(flight => 
-        flight.departure.code === searchData.from.code || 
-        flight.arrival.code === searchData.to.code
-      );
-      
-      // Still no flights? Show all flights
-      if (filtered.length === 0) {
-        filtered = allFlights;
-      }
-    }
-    
-    setDisplayedFlights(filtered);
-  };
-
-  // Handle booking a flight
-  const handleBookFlight = (flight) => {
-    setSelectedFlight(flight);
-    
-    // Check if user is logged in
-    if (!user) {
-      setIsLoginRequired(true);
-    } else {
-      // If user is logged in, pre-fill the registration form
-      setUserDetails({
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        phone: '',
-        address: '',
-        city: '',
-        country: '',
-        postalCode: '',
-        passport: '',
-        birthDate: ''
-      });
-      setIsRegisterModalOpen(true);
-    }
-  };
-
-  // Handle completion of registration
-  const handleRegistrationComplete = (userData) => {
-    setUserDetails(userData);
-    setIsRegisterModalOpen(false);
-    setIsConfirmationModalOpen(true);
-    
-    // Store user data in localStorage if not already stored
-    if (!user) {
-      const newUser = {
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        email: userData.email
-      };
-      localStorage.setItem('flyEliteUser', JSON.stringify(newUser));
-      setUser(newUser);
-    }
-  };
-
-  // Handle login requirement
-  const handleLoginContinue = () => {
-    setIsLoginRequired(false);
-    setIsRegisterModalOpen(true);
-  };
-
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Flight Search Results</h1>
-      
-      {searchData && (
-        <div className="bg-gray-50 p-4 rounded-lg mb-6">
-          <h2 className="font-semibold mb-2">Your Search</h2>
-          <div className="flex flex-wrap gap-4">
-            <div>
-              <span className="text-gray-600 text-sm">From:</span>
-              <div className="font-medium">{searchData.from.display}</div>
-            </div>
-            <div>
-              <span className="text-gray-600 text-sm">To:</span>
-              <div className="font-medium">{searchData.to.display}</div>
-            </div>
-            <div>
-              <span className="text-gray-600 text-sm">Departure:</span>
-              <div className="font-medium">{new Date(searchData.departureDate).toLocaleDateString()}</div>
-            </div>
-            {searchData.returnDate && (
-              <div>
-                <span className="text-gray-600 text-sm">Return:</span>
-                <div className="font-medium">{new Date(searchData.returnDate).toLocaleDateString()}</div>
-              </div>
-            )}
-            <div>
-              <span className="text-gray-600 text-sm">Passengers:</span>
-              <div className="font-medium">
-                {searchData.passengers.adults + searchData.passengers.children + searchData.passengers.infants}
-              </div>
-            </div>
-            <div>
-              <span className="text-gray-600 text-sm">Class:</span>
-              <div className="font-medium capitalize">{searchData.cabinClass}</div>
-            </div>
-          </div>
-        </div>
-      )}
-      
-      {displayedFlights.length === 0 ? (
-        <div className="flex flex-col items-center justify-center bg-white p-8 rounded-lg shadow-sm">
-          <AlertCircle className="w-16 h-16 text-gray-400 mb-4" />
-          <h2 className="text-xl font-semibold mb-2">No flights found</h2>
-          <p className="text-gray-600">Try adjusting your search criteria</p>
-        </div>
-      ) : (
-        <div className="space-y-6">
-          {displayedFlights.map((flight) => (
-            <div key={flight.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
-              <div className="p-6">
-                <div className="flex flex-col md:flex-row md:justify-between md:items-center">
-                  <div className="mb-4 md:mb-0">
-                    <div className="text-lg font-bold mb-1">{flight.airline}</div>
-                    <div className="text-sm text-gray-600">Flight {flight.flightNo}</div>
-                  </div>
-                  
-                  <div className="flex-1 md:ml-8 md:mr-8">
-                    <div className="flex items-center justify-between">
-                      <div className="text-center">
-                        <div className="text-2xl font-bold">{flight.departure.time}</div>
-                        <div className="text-sm font-medium">{flight.departure.code}</div>
-                        <div className="text-xs text-gray-600">{flight.departure.city}</div>
-                      </div>
-                      
-                      <div className="flex-1 mx-4">
-                        <div className="flex flex-col items-center">
-                          <div className="text-xs text-gray-500 mb-1">{flight.duration}</div>
-                          <div className="w-full flex items-center">
-                            <div className="h-[2px] flex-1 bg-gray-300"></div>
-                            <ArrowRight className="w-4 h-4 text-gray-400 mx-1" />
-                            <div className="h-[2px] flex-1 bg-gray-300"></div>
-                          </div>
-                          <div className="text-xs text-gray-500 mt-1">
-                            {flight.stops === 0 ? 'Nonstop' : 
-                              `${flight.stops} stop in ${flight.stopInfo.city} (${flight.stopInfo.duration})`}
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="text-center">
-                        <div className="text-2xl font-bold">{flight.arrival.time}</div>
-                        <div className="text-sm font-medium">{flight.arrival.code}</div>
-                        <div className="text-xs text-gray-600">{flight.arrival.city}</div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex flex-col items-end">
-                    <div className="text-2xl font-bold text-primary-600 mb-2">{flight.currency}{flight.price}</div>
-                    <button 
-                      onClick={() => handleBookFlight(flight)}
-                      className="px-6 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300"
-                    >
-                      Book Now
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-      
-      {/* Login Required Dialog */}
-      <AlertDialog open={isLoginRequired} onOpenChange={setIsLoginRequired}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Sign in Required</AlertDialogTitle>
-            <AlertDialogDescription>
-              Please sign in to continue with your flight booking.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel asChild>
-              <button className="px-4 py-2 text-gray-700 border border-gray-300 rounded-button hover:bg-gray-50">Cancel</button>
-            </AlertDialogCancel>
-            <AlertDialogAction asChild>
-              <button 
-                onClick={handleLoginContinue}
-                className="px-4 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300"
-              >
-                Continue as Guest
-              </button>
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-      
-      {isRegisterModalOpen && (
-        <RegisterModal 
-          onClose={() => setIsRegisterModalOpen(false)}
-          onComplete={handleRegistrationComplete}
-          flight={selectedFlight}
-          initialData={userDetails}
-        />
-      )}
-      
-      {isConfirmationModalOpen && (
-        <ConfirmationModal
-          onClose={() => setIsConfirmationModalOpen(false)}
-          flight={selectedFlight}
-          user={userDetails}
-        />
-      )}
-    </div>
-  );
-};
-
-export default FlightResults;
+        description: "Please search for flights from the
