@@ -706,22 +706,25 @@ const FlightResults = () => {
         </div>
       )}
 
-      <RegisterModal 
-        isOpen={isRegisterModalOpen} 
-        onClose={() => setIsRegisterModalOpen(false)}
-        onSuccess={(details) => {
-          setUserDetails(details);
-          setIsRegisterModalOpen(false);
-          setIsConfirmationModalOpen(true);
-        }}
-      />
+      {isRegisterModalOpen && (
+        <RegisterModal 
+          onClose={() => setIsRegisterModalOpen(false)}
+          onComplete={(details) => {
+            setUserDetails(details);
+            setIsRegisterModalOpen(false);
+            setIsConfirmationModalOpen(true);
+          }}
+          flight={selectedFlight}
+        />
+      )}
       
-      <ConfirmationModal
-        isOpen={isConfirmationModalOpen}
-        onClose={() => setIsConfirmationModalOpen(false)}
-        flightDetails={selectedFlight}
-        userDetails={userDetails}
-      />
+      {isConfirmationModalOpen && (
+        <ConfirmationModal
+          onClose={() => setIsConfirmationModalOpen(false)}
+          flight={selectedFlight}
+          user={userDetails}
+        />
+      )}
       
       <AlertDialog open={isLoginRequired}>
         <AlertDialogContent>
