@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ArrowRight, AlertCircle } from 'lucide-react';
 import RegisterModal from './RegisterModal';
 import ConfirmationModal from './ConfirmationModal';
@@ -16,18 +16,34 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 
+interface SearchData {
+  tripType: 'roundTrip' | 'oneWay' | 'multiCity';
+  from: { code: string; display: string };
+  to: { code: string; display: string };
+  departureDate: string;
+  returnDate?: string;
+  passengers: {
+    adults: number;
+    children: number;
+    infants: number;
+  };
+  cabinClass: string;
+}
+
 const FlightResults = () => {
-  const location = useLocation();
+  const navigate = useNavigate();
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [isLoginRequired, setIsLoginRequired] = useState(false);
   const [selectedFlight, setSelectedFlight] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
   const [user, setUser] = useState(null);
+  const [searchData, setSearchData] = useState<SearchData | null>(null);
+  const [displayedFlights, setDisplayedFlights] = useState([]);
   const { toast } = useToast();
   
   // Sample flight data with prices in INR
-  const flights = [
+  const allFlights = [
     {
       id: 1,
       airline: 'Fly Elite Airways',
@@ -105,16 +121,136 @@ const FlightResults = () => {
       stops: 1,
       stopInfo: { city: 'Ahmedabad', duration: '45m' },
       currency: '₹'
+    },
+    // Add more flight routes
+    {
+      id: 8,
+      airline: 'Fly Elite Airways',
+      flightNo: 'FE105',
+      departure: { city: 'Mumbai', code: 'BOM', time: '07:15', date: '2023-07-15' },
+      arrival: { city: 'New Delhi', code: 'DEL', time: '09:30', date: '2023-07-15' },
+      duration: '2h 15m',
+      price: 7199,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 9,
+      airline: 'IndiGo',
+      flightNo: 'IN302',
+      departure: { city: 'Bengaluru', code: 'BLR', time: '08:00', date: '2023-07-15' },
+      arrival: { city: 'Mumbai', code: 'BOM', time: '09:45', date: '2023-07-15' },
+      duration: '1h 45m',
+      price: 4299,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 10,
+      airline: 'Vistara',
+      flightNo: 'VS210',
+      departure: { city: 'Chennai', code: 'MAA', time: '10:30', date: '2023-07-15' },
+      arrival: { city: 'Hyderabad', code: 'HYD', time: '11:45', date: '2023-07-15' },
+      duration: '1h 15m',
+      price: 3799,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 11,
+      airline: 'SpiceJet',
+      flightNo: 'SJ415',
+      departure: { city: 'Kolkata', code: 'CCU', time: '12:45', date: '2023-07-15' },
+      arrival: { city: 'New Delhi', code: 'DEL', time: '15:00', date: '2023-07-15' },
+      duration: '2h 15m',
+      price: 5499,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 12,
+      airline: 'Air India',
+      flightNo: 'AI526',
+      departure: { city: 'Hyderabad', code: 'HYD', time: '16:30', date: '2023-07-15' },
+      arrival: { city: 'Bengaluru', code: 'BLR', time: '17:45', date: '2023-07-15' },
+      duration: '1h 15m',
+      price: 3999,
+      stops: 0,
+      currency: '₹'
+    },
+    {
+      id: 13,
+      airline: 'Fly Elite Airways',
+      flightNo: 'FE317',
+      departure: { city: 'Mumbai', code: 'BOM', time: '14:00', date: '2023-07-15' },
+      arrival: { city: 'Goa', code: 'GOI', time: '15:15', date: '2023-07-15' },
+      duration: '1h 15m',
+      price: 5299,
+      stops: 0,
+      currency: '₹'
     }
   ];
 
-  // Check if user is logged in
+  // Check if user is logged in and load search data
   useEffect(() => {
     const storedUser = localStorage.getItem('flyEliteUser');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
-  }, []);
+    
+    // Get search data from localStorage
+    const searchDataStr = localStorage.getItem('flyEliteSearchData');
+    if (searchDataStr) {
+      try {
+        const parsedSearchData = JSON.parse(searchDataStr);
+        setSearchData(parsedSearchData);
+        
+        // Filter flights based on search criteria
+        filterFlights(parsedSearchData);
+      } catch (err) {
+        console.error('Error parsing search data:', err);
+        // If there's an error, just show all flights
+        setDisplayedFlights(allFlights);
+      }
+    } else {
+      // If no search data, redirect back to home
+      toast({
+        title: "No Search Data",
+        description: "Please search for flights from the home page.",
+        variant: "destructive"
+      });
+      setTimeout(() => navigate('/'), 2000);
+    }
+  }, [navigate, toast]);
+
+  // Filter flights based on search criteria
+  const filterFlights = (searchData) => {
+    if (!searchData || !searchData.from || !searchData.to) {
+      setDisplayedFlights(allFlights);
+      return;
+    }
+    
+    // Filter flights based on from and to locations
+    let filtered = allFlights.filter(flight => 
+      flight.departure.code === searchData.from.code && 
+      flight.arrival.code === searchData.to.code
+    );
+    
+    // If no flights found with the exact route, show flights from the same departure city
+    if (filtered.length === 0) {
+      filtered = allFlights.filter(flight => 
+        flight.departure.code === searchData.from.code || 
+        flight.arrival.code === searchData.to.code
+      );
+      
+      // Still no flights? Show all flights
+      if (filtered.length === 0) {
+        filtered = allFlights;
+      }
+    }
+    
+    setDisplayedFlights(filtered);
+  };
 
   // Handle booking a flight
   const handleBookFlight = (flight) => {
@@ -169,7 +305,43 @@ const FlightResults = () => {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Flight Search Results</h1>
       
-      {flights.length === 0 ? (
+      {searchData && (
+        <div className="bg-gray-50 p-4 rounded-lg mb-6">
+          <h2 className="font-semibold mb-2">Your Search</h2>
+          <div className="flex flex-wrap gap-4">
+            <div>
+              <span className="text-gray-600 text-sm">From:</span>
+              <div className="font-medium">{searchData.from.display}</div>
+            </div>
+            <div>
+              <span className="text-gray-600 text-sm">To:</span>
+              <div className="font-medium">{searchData.to.display}</div>
+            </div>
+            <div>
+              <span className="text-gray-600 text-sm">Departure:</span>
+              <div className="font-medium">{new Date(searchData.departureDate).toLocaleDateString()}</div>
+            </div>
+            {searchData.returnDate && (
+              <div>
+                <span className="text-gray-600 text-sm">Return:</span>
+                <div className="font-medium">{new Date(searchData.returnDate).toLocaleDateString()}</div>
+              </div>
+            )}
+            <div>
+              <span className="text-gray-600 text-sm">Passengers:</span>
+              <div className="font-medium">
+                {searchData.passengers.adults + searchData.passengers.children + searchData.passengers.infants}
+              </div>
+            </div>
+            <div>
+              <span className="text-gray-600 text-sm">Class:</span>
+              <div className="font-medium capitalize">{searchData.cabinClass}</div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {displayedFlights.length === 0 ? (
         <div className="flex flex-col items-center justify-center bg-white p-8 rounded-lg shadow-sm">
           <AlertCircle className="w-16 h-16 text-gray-400 mb-4" />
           <h2 className="text-xl font-semibold mb-2">No flights found</h2>
@@ -177,7 +349,7 @@ const FlightResults = () => {
         </div>
       ) : (
         <div className="space-y-6">
-          {flights.map((flight) => (
+          {displayedFlights.map((flight) => (
             <div key={flight.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
               <div className="p-6">
                 <div className="flex flex-col md:flex-row md:justify-between md:items-center">

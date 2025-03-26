@@ -1,6 +1,8 @@
+
 import { useState, useRef, useEffect } from 'react';
 import { PlaneIcon, PlaneLanding, Calendar, ArrowLeftRight } from 'lucide-react';
 import PassengerSelector from './PassengerSelector';
+import { useToast } from "@/hooks/use-toast";
 
 interface Passengers {
   adults: number;
@@ -49,7 +51,9 @@ const SearchForm = ({ onSearch }: SearchFormProps) => {
   const [toSuggestions, setToSuggestions] = useState<AirportOption[]>([]);
   const [showFromSuggestions, setShowFromSuggestions] = useState<boolean>(false);
   const [showToSuggestions, setShowToSuggestions] = useState<boolean>(false);
+  const [validationError, setValidationError] = useState<string>('');
   
+  const { toast } = useToast();
   const fromInputRef = useRef<HTMLInputElement>(null);
   const toInputRef = useRef<HTMLInputElement>(null);
   const fromSuggestionsRef = useRef<HTMLDivElement>(null);
@@ -94,6 +98,7 @@ const SearchForm = ({ onSearch }: SearchFormProps) => {
     const value = e.target.value;
     setFrom(value);
     setFromCode('');
+    setValidationError('');
     
     if (value.length > 1) {
       const filteredAirports = airports.filter(airport => 
@@ -112,6 +117,7 @@ const SearchForm = ({ onSearch }: SearchFormProps) => {
     const value = e.target.value;
     setTo(value);
     setToCode('');
+    setValidationError('');
     
     if (value.length > 1) {
       const filteredAirports = airports.filter(airport => 
@@ -164,13 +170,37 @@ const SearchForm = ({ onSearch }: SearchFormProps) => {
     e.preventDefault();
     
     // Validate that all required fields are filled
-    if (!fromCode || !toCode || !departureDate || (tripType === 'roundTrip' && !returnDate)) {
-      // Add validation errors or notifications here
-      console.log("Please fill in all required fields");
+    if (!fromCode || !toCode) {
+      setValidationError('Please select departure and destination airports');
+      toast({
+        title: "Input Error",
+        description: "Please select both departure and destination airports",
+        variant: "destructive"
+      });
       return;
     }
     
-    // Prepare search data
+    if (!departureDate || (tripType === 'roundTrip' && !returnDate)) {
+      setValidationError('Please select all required dates');
+      toast({
+        title: "Input Error",
+        description: "Please select all required travel dates",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (fromCode === toCode) {
+      setValidationError('Departure and destination cannot be the same');
+      toast({
+        title: "Input Error",
+        description: "Departure and destination cannot be the same",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Prepare search data and store in localStorage for the flights page
     const searchData = {
       tripType,
       from: { code: fromCode, display: from },
@@ -181,7 +211,10 @@ const SearchForm = ({ onSearch }: SearchFormProps) => {
       cabinClass,
     };
     
+    // Store search data in localStorage to be used on flights page
+    localStorage.setItem('flyEliteSearchData', JSON.stringify(searchData));
     console.log('Search data:', searchData);
+    
     // Call the onSearch prop to navigate to the flights page
     onSearch();
   };
@@ -225,6 +258,12 @@ const SearchForm = ({ onSearch }: SearchFormProps) => {
           Multi-City
         </button>
       </div>
+
+      {validationError && (
+        <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-lg text-sm">
+          {validationError}
+        </div>
+      )}
 
       <form onSubmit={handleSearch}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -316,7 +355,10 @@ const SearchForm = ({ onSearch }: SearchFormProps) => {
                 type="date"
                 className="w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-primary-500 transition-all duration-300"
                 value={departureDate}
-                onChange={(e) => setDepartureDate(e.target.value)}
+                onChange={(e) => {
+                  setDepartureDate(e.target.value);
+                  setValidationError('');
+                }}
                 min={new Date().toISOString().split('T')[0]}
               />
               <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -331,7 +373,10 @@ const SearchForm = ({ onSearch }: SearchFormProps) => {
                 type="date"
                 className="w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-primary-500 transition-all duration-300"
                 value={returnDate}
-                onChange={(e) => setReturnDate(e.target.value)}
+                onChange={(e) => {
+                  setReturnDate(e.target.value);
+                  setValidationError('');
+                }}
                 min={departureDate}
                 disabled={!isReturnVisible}
               />

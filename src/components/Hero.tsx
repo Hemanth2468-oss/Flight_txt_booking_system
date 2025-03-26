@@ -43,6 +43,9 @@ const Hero = () => {
   const handleMultiCitySearch = (flights: Flight[]) => {
     console.log('Multi-city flights:', flights);
     
+    // Store multi-city flight data in localStorage
+    localStorage.setItem('flyEliteMultiCityData', JSON.stringify(flights));
+    
     // Check if user is logged in
     const storedUser = localStorage.getItem('flyEliteUser');
     
