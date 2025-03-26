@@ -23,7 +23,7 @@ const Flights = () => {
         <div className="container mx-auto px-4 mb-6">
           <Button
             variant="outline"
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 hover:bg-primary-50 hover:text-primary-600 transition-all"
             onClick={() => navigate('/')}
           >
             <ArrowLeft className="h-4 w-4" />

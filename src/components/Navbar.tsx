@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Globe, Menu, X } from 'lucide-react';
+import { Globe, Menu, X, Plane } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import {
   AlertDialog,
@@ -18,7 +17,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-// Define form schemas
 const loginSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
   password: z.string().min(6, { message: "Password must be at least 6 characters" }),
@@ -71,7 +69,6 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Check if user is already logged in from localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem('flyEliteUser');
     if (storedUser) {
@@ -80,8 +77,6 @@ const Navbar = () => {
   }, []);
 
   const handleLogin = (data) => {
-    // In a real app, this would make an API call to authenticate
-    // For now, we'll simulate a successful login
     const userData = {
       id: Math.random().toString(36).substr(2, 9),
       email: data.email,
@@ -102,8 +97,6 @@ const Navbar = () => {
   };
 
   const handleRegister = (data) => {
-    // In a real app, this would make an API call to register
-    // For now, we'll simulate a successful registration
     const userData = {
       id: Math.random().toString(36).substr(2, 9),
       email: data.email,
@@ -146,10 +139,10 @@ const Navbar = () => {
           <div className="flex items-center space-x-8">
             <Link 
               to="/"
-              className="text-2xl font-pacifico text-primary-600 transition-transform duration-300 transform hover:scale-105"
+              className="text-2xl font-pacifico text-primary-600 transition-transform duration-300 transform hover:scale-105 flex items-center"
             >
               Fly Elite
-              <span className="ml-1">✈️</span>
+              <Plane className="ml-2 h-5 w-5 text-primary-600 transform -rotate-45" />
             </Link>
             <div className="hidden md:flex space-x-8">
               <Link to="/flights" className="text-gray-700 hover:text-primary-600 transition-colors duration-200">Flights</Link>
@@ -208,7 +201,6 @@ const Navbar = () => {
         </nav>
       </div>
       
-      {/* Mobile menu */}
       <div 
         className={`fixed inset-0 z-40 bg-white transform transition-transform duration-300 ease-in-out ${
           isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
@@ -289,7 +281,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Login Dialog */}
       <AlertDialog open={isLoginOpen} onOpenChange={setIsLoginOpen}>
         <AlertDialogContent className="max-w-md">
           <AlertDialogHeader>
@@ -367,7 +358,6 @@ const Navbar = () => {
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* Register Dialog */}
       <AlertDialog open={isRegisterOpen} onOpenChange={setIsRegisterOpen}>
         <AlertDialogContent className="max-w-md">
           <AlertDialogHeader>

@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, AlertCircle } from 'lucide-react';
+import { ArrowRight, AlertCircle, ArrowUpDown, Filter } from 'lucide-react';
 import RegisterModal from './RegisterModal';
 import ConfirmationModal from './ConfirmationModal';
 import { useToast } from "@/hooks/use-toast";
@@ -15,6 +15,23 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface SearchData {
   tripType: 'roundTrip' | 'oneWay' | 'multiCity';
@@ -30,18 +47,57 @@ interface SearchData {
   cabinClass: string;
 }
 
+interface Flight {
+  id: number;
+  airline: string;
+  flightNo: string;
+  departure: {
+    city: string;
+    code: string;
+    time: string;
+    date: string;
+  };
+  arrival: {
+    city: string;
+    code: string;
+    time: string;
+    date: string;
+  };
+  duration: string;
+  price: number;
+  stops: number;
+  stopInfo?: {
+    city: string;
+    duration: string;
+  };
+  currency: string;
+}
+
 const FlightResults = () => {
   const navigate = useNavigate();
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [isLoginRequired, setIsLoginRequired] = useState(false);
-  const [selectedFlight, setSelectedFlight] = useState(null);
+  const [selectedFlight, setSelectedFlight] = useState<Flight | null>(null);
   const [userDetails, setUserDetails] = useState(null);
   const [user, setUser] = useState(null);
   const [searchData, setSearchData] = useState<SearchData | null>(null);
-  const [displayedFlights, setDisplayedFlights] = useState([]);
+  const [displayedFlights, setDisplayedFlights] = useState<Flight[]>([]);
+  const [allFlightsData, setAllFlightsData] = useState<Flight[]>([]);
   const { toast } = useToast();
   
+  // Filter states
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [filterAirlines, setFilterAirlines] = useState<string[]>([]);
+  const [selectedAirlines, setSelectedAirlines] = useState<string[]>([]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 50000]);
+  const [stopFilter, setStopFilter] = useState<number | null>(null);
+  const [sortBy, setSortBy] = useState<string>("price-asc");
+  
+  // For button glow effect
+  const [activeButton, setActiveButton] = useState<number | null>(null);
+  
+  // All flights data (moved from inline to state for better organization)
   const allFlights = [
     {
       id: 1,
@@ -634,15 +690,261 @@ const FlightResults = () => {
   ];
 
   useEffect(() => {
-    // Set displayed flights to all flights when component mounts
-    setDisplayedFlights(allFlights);
+    // Set all flights data
+    const combinedFlights = [...allFlights, ...additionalFlights];
+    setAllFlightsData(combinedFlights);
+    setDisplayedFlights(combinedFlights);
+    
+    // Extract unique airlines for filter
+    const airlines = [...new Set(combinedFlights.map(flight => flight.airline))];
+    setFilterAirlines(airlines);
+    
+    // Find min and max prices
+    const prices = combinedFlights.map(flight => flight.price);
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+    setPriceRange([minPrice, maxPrice]);
   }, []);
+
+  // Apply filters and sorting
+  const applyFilters = () => {
+    let filteredFlights = [...allFlightsData];
+    
+    // Filter by airlines if any are selected
+    if (selectedAirlines.length > 0) {
+      filteredFlights = filteredFlights.filter(flight => 
+        selectedAirlines.includes(flight.airline)
+      );
+    }
+    
+    // Filter by price range
+    filteredFlights = filteredFlights.filter(flight => 
+      flight.price >= priceRange[0] && flight.price <= priceRange[1]
+    );
+    
+    // Filter by stops
+    if (stopFilter !== null) {
+      filteredFlights = filteredFlights.filter(flight => 
+        flight.stops === stopFilter
+      );
+    }
+    
+    // Apply sorting
+    filteredFlights = sortFlights(filteredFlights, sortBy);
+    
+    // Update displayed flights
+    setDisplayedFlights(filteredFlights);
+    
+    // Show toast notification
+    toast({
+      title: "Filters Applied",
+      description: `Showing ${filteredFlights.length} flights based on your filters.`,
+    });
+    
+    // Close the filter popover
+    setIsFilterOpen(false);
+  };
+  
+  // Reset all filters
+  const resetFilters = () => {
+    setSelectedAirlines([]);
+    setPriceRange([0, 50000]);
+    setStopFilter(null);
+    setSortBy("price-asc");
+    setDisplayedFlights(allFlightsData);
+    
+    toast({
+      title: "Filters Reset",
+      description: "All filters have been reset.",
+    });
+    
+    setIsFilterOpen(false);
+  };
+  
+  // Sort flights based on criteria
+  const sortFlights = (flights: Flight[], criteria: string) => {
+    const sortedFlights = [...flights];
+    
+    switch (criteria) {
+      case "price-asc":
+        return sortedFlights.sort((a, b) => a.price - b.price);
+      case "price-desc":
+        return sortedFlights.sort((a, b) => b.price - a.price);
+      case "duration-asc":
+        return sortedFlights.sort((a, b) => {
+          const durationA = parseInt(a.duration.split('h')[0]) * 60 + parseInt(a.duration.split('h')[1].split('m')[0]);
+          const durationB = parseInt(b.duration.split('h')[0]) * 60 + parseInt(b.duration.split('h')[1].split('m')[0]);
+          return durationA - durationB;
+        });
+      case "departure-asc":
+        return sortedFlights.sort((a, b) => {
+          const timeA = parseInt(a.departure.time.replace(':', ''));
+          const timeB = parseInt(b.departure.time.replace(':', ''));
+          return timeA - timeB;
+        });
+      case "departure-desc":
+        return sortedFlights.sort((a, b) => {
+          const timeA = parseInt(a.departure.time.replace(':', ''));
+          const timeB = parseInt(b.departure.time.replace(':', ''));
+          return timeB - timeA;
+        });
+      default:
+        return sortedFlights;
+    }
+  };
+  
+  // Handle airline selection
+  const handleAirlineChange = (airline: string) => {
+    setSelectedAirlines(prev => {
+      if (prev.includes(airline)) {
+        return prev.filter(a => a !== airline);
+      } else {
+        return [...prev, airline];
+      }
+    });
+  };
+  
+  // Handle price range change
+  const handlePriceChange = (value: number[]) => {
+    setPriceRange([value[0], value[1]]);
+  };
+  
+  // Handle sort change
+  const handleSortChange = (value: string) => {
+    setSortBy(value);
+    
+    // Apply sort immediately
+    const sortedFlights = sortFlights(displayedFlights, value);
+    setDisplayedFlights(sortedFlights);
+    
+    toast({
+      title: "Flights Sorted",
+      description: `Flights have been sorted by ${
+        value === "price-asc" ? "price (low to high)" :
+        value === "price-desc" ? "price (high to low)" :
+        value === "duration-asc" ? "shortest duration" :
+        value === "departure-asc" ? "earliest departure" :
+        "latest departure"
+      }`,
+    });
+  };
+  
+  // Handle button interaction
+  const handleButtonHover = (id: number) => {
+    setActiveButton(id);
+  };
+  
+  const handleButtonLeave = () => {
+    setActiveButton(null);
+  };
 
   return (
     <div className="container mx-auto px-4 pb-8">
       <h1 className="text-2xl font-bold mb-4">Flight Results</h1>
-      <p className="mb-6">Showing {displayedFlights.length} flights</p>
       
+      {/* Filters and Sort */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+        <p className="text-gray-600">Showing {displayedFlights.length} flights</p>
+        
+        <div className="flex flex-wrap gap-2">
+          {/* Sorting dropdown */}
+          <Select value={sortBy} onValueChange={handleSortChange}>
+            <SelectTrigger className="w-full md:w-[180px]">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="price-asc">Price: Low to High</SelectItem>
+              <SelectItem value="price-desc">Price: High to Low</SelectItem>
+              <SelectItem value="duration-asc">Duration: Shortest</SelectItem>
+              <SelectItem value="departure-asc">Departure: Earliest</SelectItem>
+              <SelectItem value="departure-desc">Departure: Latest</SelectItem>
+            </SelectContent>
+          </Select>
+          
+          {/* Filter popover */}
+          <Popover open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="gap-2">
+                <Filter className="h-4 w-4" /> Filters
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 md:w-96">
+              <div className="space-y-4 py-2">
+                <h3 className="font-medium text-lg">Filter Flights</h3>
+                
+                {/* Price Range Filter */}
+                <div className="space-y-2">
+                  <h4 className="font-medium text-sm">Price Range</h4>
+                  <div className="flex justify-between text-sm text-gray-500">
+                    <span>₹{priceRange[0]}</span>
+                    <span>₹{priceRange[1]}</span>
+                  </div>
+                  <Slider
+                    value={[priceRange[0], priceRange[1]]}
+                    min={0}
+                    max={50000}
+                    step={1000}
+                    onValueChange={handlePriceChange}
+                    className="mt-2"
+                  />
+                </div>
+                
+                {/* Stops Filter */}
+                <div className="space-y-2">
+                  <h4 className="font-medium text-sm">Stops</h4>
+                  <RadioGroup 
+                    value={stopFilter === null ? "all" : stopFilter.toString()} 
+                    onValueChange={(value) => setStopFilter(value === "all" ? null : parseInt(value))}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="all" id="all" />
+                      <Label htmlFor="all">All</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="0" id="non-stop" />
+                      <Label htmlFor="non-stop">Non-stop</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="1" id="one-stop" />
+                      <Label htmlFor="one-stop">1 Stop</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+                
+                {/* Airlines Filter */}
+                <div className="space-y-2">
+                  <h4 className="font-medium text-sm">Airlines</h4>
+                  <div className="max-h-40 overflow-y-auto space-y-2">
+                    {filterAirlines.map((airline) => (
+                      <div key={airline} className="flex items-center space-x-2">
+                        <Checkbox 
+                          id={`airline-${airline}`} 
+                          checked={selectedAirlines.includes(airline)}
+                          onCheckedChange={() => handleAirlineChange(airline)}
+                        />
+                        <label 
+                          htmlFor={`airline-${airline}`}
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          {airline}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="flex justify-between pt-2">
+                  <Button variant="outline" onClick={resetFilters}>Reset</Button>
+                  <Button onClick={applyFilters} className="glow-button">Apply Filters</Button>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
+      </div>
+      
+      {/* Flight Results */}
       <div className="space-y-4">
         {displayedFlights.map((flight) => (
           <div 
@@ -668,6 +970,7 @@ const FlightResults = () => {
                   </div>
                   <p className="text-xs text-gray-500">
                     {flight.stops === 0 ? 'Direct' : `${flight.stops} Stop${flight.stops > 1 ? 's' : ''}`}
+                    {flight.stopInfo && ` (${flight.stopInfo.city}, ${flight.stopInfo.duration})`}
                   </p>
                 </div>
                 
@@ -679,15 +982,17 @@ const FlightResults = () => {
               
               <div className="text-right">
                 <p className="font-bold text-lg">{flight.currency} {flight.price}</p>
-                <button 
-                  className="mt-2 bg-primary text-white px-4 py-2 rounded flex items-center justify-center gap-1 hover:bg-primary/90 transition-colors"
+                <Button 
+                  className={`mt-2 ${activeButton === flight.id ? 'glow-button' : ''}`}
                   onClick={() => {
                     setSelectedFlight(flight);
                     setIsRegisterModalOpen(true);
                   }}
+                  onMouseEnter={() => handleButtonHover(flight.id)}
+                  onMouseLeave={handleButtonLeave}
                 >
                   Book <ArrowRight className="h-4 w-4" />
-                </button>
+                </Button>
               </div>
             </div>
           </div>
