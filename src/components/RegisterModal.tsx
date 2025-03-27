@@ -7,9 +7,11 @@ interface RegisterModalProps {
   onComplete: (userData: any) => void;
   flight?: any; // Make flight optional
   initialData?: any;
+  promoCode?: string | null; // Add promoCode prop
+  promoDiscount?: number; // Add promoDiscount prop
 }
 
-const RegisterModal = ({ onClose, onComplete, flight, initialData }: RegisterModalProps) => {
+const RegisterModal = ({ onClose, onComplete, flight, initialData, promoCode, promoDiscount }: RegisterModalProps) => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -85,9 +87,19 @@ const RegisterModal = ({ onClose, onComplete, flight, initialData }: RegisterMod
                 </div>
               </div>
               <div className="mt-2 border-t pt-2">
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <p className="font-medium">Total Price</p>
-                  <p className="font-bold text-primary-600">${flight.price}</p>
+                  <div className="text-right">
+                    {flight.originalPrice && promoDiscount && (
+                      <p className="text-sm text-gray-500 line-through">${flight.originalPrice}</p>
+                    )}
+                    <p className="font-bold text-primary-600">${flight.price}</p>
+                    {promoCode && promoDiscount && (
+                      <p className="text-xs text-green-600">
+                        {promoDiscount}% off with code <span className="font-mono">{promoCode}</span>
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

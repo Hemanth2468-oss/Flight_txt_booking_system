@@ -9,9 +9,11 @@ interface ConfirmationModalProps {
   onClose: () => void;
   flight: any;
   user: any;
+  promoCode?: string | null; // Add promoCode prop
+  promoDiscount?: number; // Add promoDiscount prop
 }
 
-const ConfirmationModal = ({ onClose, flight, user }: ConfirmationModalProps) => {
+const ConfirmationModal = ({ onClose, flight, user, promoCode, promoDiscount }: ConfirmationModalProps) => {
   const [isSending, setIsSending] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -73,7 +75,9 @@ const ConfirmationModal = ({ onClose, flight, user }: ConfirmationModalProps) =>
         bookingReference,
         flight,
         user,
-        date: new Date().toISOString()
+        date: new Date().toISOString(),
+        promoCode,
+        promoDiscount
       });
       localStorage.setItem('flyEliteBookings', JSON.stringify(bookings));
       
@@ -98,6 +102,11 @@ const ConfirmationModal = ({ onClose, flight, user }: ConfirmationModalProps) =>
           <div>
             <p className="font-medium">Booking Complete!</p>
             <p className="text-sm">Your booking reference: <span className="font-bold">{bookingReference}</span></p>
+            {promoCode && promoDiscount && (
+              <p className="text-xs mt-1">
+                <span className="font-semibold">{promoDiscount}% discount</span> applied with code <span className="font-mono">{promoCode}</span>
+              </p>
+            )}
           </div>
         </div>
         
@@ -107,6 +116,8 @@ const ConfirmationModal = ({ onClose, flight, user }: ConfirmationModalProps) =>
               flight={flight}
               user={user}
               bookingReference={bookingReference}
+              promoCode={promoCode}
+              promoDiscount={promoDiscount}
             />
           </div>
         </div>
