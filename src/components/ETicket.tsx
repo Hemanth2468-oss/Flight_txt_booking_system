@@ -5,9 +5,11 @@ interface ETicketProps {
   flight: any; // We'll add guards for this
   user: any; // We'll add guards for this
   bookingReference: string;
+  promoCode?: string | null; // Add promoCode prop
+  promoDiscount?: number; // Add promoDiscount prop
 }
 
-const ETicket = ({ flight, user, bookingReference }: ETicketProps) => {
+const ETicket = ({ flight, user, bookingReference, promoCode, promoDiscount }: ETicketProps) => {
   // Add a guard to prevent rendering with invalid data
   if (!flight || !user) {
     return (
@@ -137,6 +139,11 @@ const ETicket = ({ flight, user, bookingReference }: ETicketProps) => {
             <div className="text-right">
               <p className="text-sm text-gray-600">Total Paid</p>
               <p className="font-bold text-primary-600">${flight?.price || 'N/A'}</p>
+              {promoCode && promoDiscount && (
+                <p className="text-xs text-green-600">
+                  {promoDiscount}% off with code <span className="font-mono">{promoCode}</span>
+                </p>
+              )}
             </div>
           </div>
         </div>
