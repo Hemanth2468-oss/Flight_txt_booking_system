@@ -33,7 +33,7 @@ const ConfirmationModal = ({ onClose, flight, user, promoCode, promoDiscount }: 
       filename: `FlyElite_Ticket_${bookingReference}.pdf`,
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
     };
     
     html2pdf().from(ticketContent).set(opt).save()
@@ -86,7 +86,7 @@ const ConfirmationModal = ({ onClose, flight, user, promoCode, promoDiscount }: 
   
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6">
+      <div className="bg-white rounded-lg max-w-5xl w-full max-h-[90vh] overflow-y-auto p-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">Booking Confirmation</h2>
           <button 
