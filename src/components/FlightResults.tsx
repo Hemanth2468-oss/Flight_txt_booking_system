@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, AlertCircle, ArrowUpDown, Filter } from 'lucide-react';
+import { ArrowRight, AlertCircle, ArrowUpDown, Filter, Tag, Check } from 'lucide-react';
 import RegisterModal from './RegisterModal';
 import ConfirmationModal from './ConfirmationModal';
 import { useToast } from "@/hooks/use-toast";
@@ -32,6 +32,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 
 interface SearchData {
   tripType: 'roundTrip' | 'oneWay' | 'multiCity';
@@ -65,6 +66,7 @@ interface Flight {
   };
   duration: string;
   price: number;
+  originalPrice?: number; // To store the original price before discount
   stops: number;
   stopInfo?: {
     city: string;
@@ -73,7 +75,19 @@ interface Flight {
   currency: string;
 }
 
-const FlightResults = () => {
+interface PromoOffer {
+  code: string;
+  discount: number; // Percentage discount
+  description: string;
+  validUntil: string;
+}
+
+interface FlightResultsProps {
+  promoCode?: string | null;
+  setLowestPrice?: (price: number) => void;
+}
+
+const FlightResults = ({ promoCode, setLowestPrice }: FlightResultsProps) => {
   const navigate = useNavigate();
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
@@ -96,6 +110,46 @@ const FlightResults = () => {
   
   // For button glow effect
   const [activeButton, setActiveButton] = useState<number | null>(null);
+  
+  // Promo code states
+  const [inputPromoCode, setInputPromoCode] = useState<string>(promoCode || '');
+  const [appliedPromoCode, setAppliedPromoCode] = useState<string | null>(promoCode);
+  const [isValidPromoCode, setIsValidPromoCode] = useState<boolean>(false);
+  const [promoDiscount, setPromoDiscount] = useState<number>(0);
+
+  // Available promo codes
+  const availablePromoCodes: PromoOffer[] = [
+    {
+      code: "FIRSTFLY",
+      discount: 20,
+      description: "First-time user discount",
+      validUntil: "2023-12-31"
+    },
+    {
+      code: "FIRSTFLY20",
+      discount: 20,
+      description: "First-time user discount - 20% off",
+      validUntil: "2023-12-31"
+    },
+    {
+      code: "FIRSTFLY50",
+      discount: 50,
+      description: "First-time user discount - 50% off",
+      validUntil: "2023-12-31"
+    },
+    {
+      code: "WEEKEND15",
+      discount: 15,
+      description: "Weekend special offer",
+      validUntil: "2023-10-31"
+    },
+    {
+      code: "CARDOFR10",
+      discount: 10,
+      description: "Credit card partner offer",
+      validUntil: "2023-11-30"
+    }
+  ];
   
   // All flights data (moved from inline to state for better organization)
   const allFlights = [
@@ -692,8 +746,15 @@ const FlightResults = () => {
   useEffect(() => {
     // Set all flights data
     const combinedFlights = [...allFlights, ...additionalFlights];
-    setAllFlightsData(combinedFlights);
-    setDisplayedFlights(combinedFlights);
+    
+    // Add originalPrice field to each flight
+    const flightsWithOriginalPrice = combinedFlights.map(flight => ({
+      ...flight,
+      originalPrice: flight.price
+    }));
+    
+    setAllFlightsData(flightsWithOriginalPrice);
+    setDisplayedFlights(flightsWithOriginalPrice);
     
     // Extract unique airlines for filter
     const airlines = [...new Set(combinedFlights.map(flight => flight.airline))];
@@ -704,7 +765,79 @@ const FlightResults = () => {
     const minPrice = Math.min(...prices);
     const maxPrice = Math.max(...prices);
     setPriceRange([minPrice, maxPrice]);
-  }, []);
+    
+    // Set lowest price for parent component
+    if (setLowestPrice) {
+      setLowestPrice(minPrice);
+    }
+    
+    // Apply promo code if provided in URL
+    if (promoCode) {
+      applyPromoCode(promoCode);
+    }
+  }, [promoCode, setLowestPrice]);
+
+  // Apply promo code function
+  const applyPromoCode = (code: string) => {
+    const promoOffer = availablePromoCodes.find(
+      promo => promo.code.toUpperCase() === code.toUpperCase()
+    );
+    
+    if (promoOffer) {
+      // Apply discount to all flights
+      const discountedFlights = allFlightsData.map(flight => {
+        const discountAmount = (flight.originalPrice || flight.price) * (promoOffer.discount / 100);
+        return {
+          ...flight,
+          price: Math.round((flight.originalPrice || flight.price) - discountAmount)
+        };
+      });
+      
+      setDisplayedFlights(discountedFlights);
+      setAppliedPromoCode(code);
+      setPromoDiscount(promoOffer.discount);
+      setIsValidPromoCode(true);
+      
+      toast({
+        title: "Promo Code Applied!",
+        description: `${promoOffer.discount}% discount applied to all flights.`,
+      });
+    } else {
+      setIsValidPromoCode(false);
+      toast({
+        title: "Invalid Promo Code",
+        description: "The promo code you entered is invalid or expired.",
+        variant: "destructive"
+      });
+    }
+  };
+  
+  // Handle promo code submit
+  const handlePromoCodeSubmit = () => {
+    if (inputPromoCode.trim()) {
+      applyPromoCode(inputPromoCode.trim());
+    }
+  };
+  
+  // Reset promo code
+  const resetPromoCode = () => {
+    // Reset prices to original
+    const resetFlights = allFlightsData.map(flight => ({
+      ...flight,
+      price: flight.originalPrice || flight.price
+    }));
+    
+    setDisplayedFlights(resetFlights);
+    setAppliedPromoCode(null);
+    setInputPromoCode('');
+    setIsValidPromoCode(false);
+    setPromoDiscount(0);
+    
+    toast({
+      title: "Promo Code Removed",
+      description: "All prices have been reset to original values."
+    });
+  };
 
   // Apply filters and sorting
   const applyFilters = () => {
@@ -841,6 +974,52 @@ const FlightResults = () => {
   return (
     <div className="container mx-auto px-4 pb-8">
       <h1 className="text-2xl font-bold mb-4">Flight Results</h1>
+      
+      {/* Promo Code Section */}
+      <div className="mb-6 bg-white p-4 rounded-lg shadow-sm">
+        <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+          <div className="flex-grow">
+            <label htmlFor="promo-code" className="text-sm font-medium text-gray-700 mb-1 block">
+              Have a promo code?
+            </label>
+            <div className="flex items-center gap-2">
+              <Input 
+                id="promo-code"
+                type="text" 
+                placeholder="Enter promo code" 
+                value={inputPromoCode} 
+                onChange={(e) => setInputPromoCode(e.target.value)}
+                className="font-mono uppercase"
+              />
+              <Button 
+                onClick={handlePromoCodeSubmit} 
+                className={`glow-button whitespace-nowrap ${appliedPromoCode ? 'bg-gray-600' : ''}`}
+                disabled={!!appliedPromoCode}
+              >
+                Apply
+              </Button>
+              {appliedPromoCode && (
+                <Button 
+                  variant="outline" 
+                  onClick={resetPromoCode}
+                  className="whitespace-nowrap"
+                >
+                  Remove
+                </Button>
+              )}
+            </div>
+          </div>
+          
+          {appliedPromoCode && (
+            <div className="bg-green-50 text-green-800 px-4 py-2 rounded-md flex items-center gap-2">
+              <Check className="h-4 w-4" />
+              <span className="text-sm">
+                <span className="font-medium">{promoDiscount}% discount</span> applied with code <span className="font-mono font-bold">{appliedPromoCode}</span>
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
       
       {/* Filters and Sort */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
@@ -981,7 +1160,13 @@ const FlightResults = () => {
               </div>
               
               <div className="text-right">
-                <p className="font-bold text-lg">{flight.currency} {flight.price}</p>
+                {flight.originalPrice && flight.originalPrice > flight.price && (
+                  <p className="text-sm text-gray-500 line-through">{flight.currency} {flight.originalPrice}</p>
+                )}
+                <p className="font-bold text-lg text-primary-600">{flight.currency} {flight.price}</p>
+                {flight.originalPrice && flight.originalPrice > flight.price && (
+                  <p className="text-xs text-green-600">You save: {flight.currency} {flight.originalPrice - flight.price}</p>
+                )}
                 <Button 
                   className={`mt-2 ${activeButton === flight.id ? 'glow-button' : ''}`}
                   onClick={() => {
@@ -1020,6 +1205,8 @@ const FlightResults = () => {
             setIsConfirmationModalOpen(true);
           }}
           flight={selectedFlight}
+          promoCode={appliedPromoCode}
+          promoDiscount={promoDiscount}
         />
       )}
       
@@ -1028,6 +1215,8 @@ const FlightResults = () => {
           onClose={() => setIsConfirmationModalOpen(false)}
           flight={selectedFlight}
           user={userDetails}
+          promoCode={appliedPromoCode}
+          promoDiscount={promoDiscount}
         />
       )}
       

@@ -1,7 +1,7 @@
 
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Tag } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { ArrowLeft, Tag, TrendingDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import Navbar from '../components/Navbar';
 import FlightResults from '../components/FlightResults';
@@ -9,11 +9,17 @@ import Footer from '../components/Footer';
 
 const Flights = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [lowestPrice, setLowestPrice] = useState<number | null>(null);
   
   // Scroll to top when the component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  
+  // Get promo code from URL parameters if it exists
+  const urlParams = new URLSearchParams(location.search);
+  const promoCode = urlParams.get('promo');
   
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
@@ -49,7 +55,19 @@ const Flights = () => {
           </div>
         </div>
         
-        <FlightResults />
+        {/* Lowest Price Banner */}
+        {lowestPrice && (
+          <div className="container mx-auto px-4 mb-6">
+            <div className="bg-green-50 border border-green-100 rounded-lg p-3 flex items-center">
+              <TrendingDown className="h-5 w-5 text-green-600 mr-2" />
+              <span className="text-sm md:text-base">
+                <span className="font-medium">Lowest price available:</span> <span className="font-mono font-bold text-green-700">₹{lowestPrice}</span>
+              </span>
+            </div>
+          </div>
+        )}
+        
+        <FlightResults promoCode={promoCode} setLowestPrice={setLowestPrice} />
       </main>
       
       <Footer />

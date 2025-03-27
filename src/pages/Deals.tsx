@@ -5,14 +5,36 @@ import Footer from '../components/Footer';
 import { ArrowRight, Tag, Plane, Calendar, CreditCard } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
+import { useToast } from "@/hooks/use-toast";
 
 const Deals = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   
   // Scroll to top when the component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  
+  // Handle booking with promo code
+  const handleBookWithPromo = (promoCode: string) => {
+    navigate(`/flights?promo=${promoCode}`);
+    
+    toast({
+      title: "Promo Code Selected",
+      description: `You've selected the ${promoCode} promo. It will be automatically applied to your booking.`,
+    });
+  };
+  
+  // Copy promo code to clipboard
+  const copyPromoCode = (code: string) => {
+    navigator.clipboard.writeText(code);
+    
+    toast({
+      title: "Promo Code Copied",
+      description: `${code} has been copied to your clipboard.`,
+    });
+  };
   
   const featuredDeals = [
     {
@@ -56,6 +78,7 @@ const Deals = () => {
       title: "Monsoon Travel Sale",
       description: "Special fares for monsoon travel season",
       discount: "Up to 25%",
+      code: "MONSOON25",
       validity: "Valid till 31 Aug 2023"
     },
     {
@@ -63,6 +86,7 @@ const Deals = () => {
       title: "Student Discount",
       description: "Special fares for students with valid ID",
       discount: "12%",
+      code: "STUDENT12",
       validity: "Valid all year"
     },
     {
@@ -70,6 +94,7 @@ const Deals = () => {
       title: "Senior Citizen Offer",
       description: "Special discounts for travelers above 60 years",
       discount: "10%",
+      code: "SENIOR10",
       validity: "Valid all year"
     },
     {
@@ -77,6 +102,7 @@ const Deals = () => {
       title: "Group Booking Discount",
       description: "Special rates for group bookings of 10+ passengers",
       discount: "Up to 15%",
+      code: "GROUP15",
       validity: "Subject to availability"
     },
     {
@@ -84,6 +110,7 @@ const Deals = () => {
       title: "Last Minute Deals",
       description: "Grab special fares on last-minute bookings",
       discount: "Varies",
+      code: "LASTMIN",
       validity: "Subject to availability"
     },
     {
@@ -91,6 +118,7 @@ const Deals = () => {
       title: "Family Vacation Package",
       description: "Special rates for family bookings with children",
       discount: "Up to 12%",
+      code: "FAMILY12",
       validity: "Valid till 31 Dec 2023"
     }
   ];
@@ -146,7 +174,12 @@ const Deals = () => {
                     <p className="text-sm text-gray-500 mb-1">Promo Code:</p>
                     <div className="flex items-center justify-between">
                       <code className="font-mono text-lg font-bold">{deal.code}</code>
-                      <button className="text-primary-600 text-sm hover:underline">Copy</button>
+                      <button 
+                        className="text-primary-600 text-sm hover:underline"
+                        onClick={() => copyPromoCode(deal.code)}
+                      >
+                        Copy
+                      </button>
                     </div>
                   </div>
                   
@@ -154,7 +187,7 @@ const Deals = () => {
                   
                   <button 
                     className={`w-full py-2.5 ${deal.buttonColor} text-white rounded-button glow-button hover:shadow-lg transition-all duration-300`}
-                    onClick={() => navigate('/flights')}
+                    onClick={() => handleBookWithPromo(deal.code)}
                   >
                     Book Now
                   </button>
@@ -171,12 +204,12 @@ const Deals = () => {
                 <p className="text-white/80 mb-4">Get an amazing 20-50% discount on your first flight booking with us</p>
                 <div className="inline-block bg-white/20 backdrop-blur-sm rounded px-4 py-2 mb-4">
                   <span className="text-white">Use code: </span>
-                  <span className="font-mono font-bold text-yellow-300">FIRSTFLY</span>
+                  <span className="font-mono font-bold text-yellow-300">FIRSTFLY50</span>
                 </div>
               </div>
               <Button 
                 className="bg-white text-primary-600 hover:bg-gray-100 px-6 py-2.5 h-auto font-medium glow-button"
-                onClick={() => navigate('/flights')}
+                onClick={() => handleBookWithPromo('FIRSTFLY50')}
               >
                 Book with Discount <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -198,14 +231,15 @@ const Deals = () => {
                       <span className="bg-primary-50 text-primary-700 px-3 py-1 rounded-full text-sm font-medium">{deal.discount}</span>
                     </div>
                     <p className="text-gray-600 mb-4">{deal.description}</p>
-                    <p className="text-xs text-gray-500">{deal.validity}</p>
+                    <p className="text-xs text-gray-500 mb-2">{deal.validity}</p>
+                    <p className="text-sm mb-4">Code: <span className="font-mono font-medium">{deal.code}</span></p>
                   </div>
                   <div className="px-6 pb-4">
                     <button 
-                      className="w-full py-2 border border-primary-600 text-primary-600 rounded-button hover:bg-primary-50 transition-colors duration-200"
-                      onClick={() => navigate('/flights')}
+                      className="w-full py-2 border border-primary-600 text-primary-600 rounded-button hover:bg-primary-50 transition-colors duration-200 glow-button"
+                      onClick={() => handleBookWithPromo(deal.code)}
                     >
-                      View Details
+                      Book with this Offer
                     </button>
                   </div>
                 </div>
