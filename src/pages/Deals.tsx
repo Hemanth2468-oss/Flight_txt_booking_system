@@ -1,6 +1,6 @@
 
 import { useEffect } from 'react';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/navbar';
 import Footer from '../components/Footer';
 import { ArrowRight, Tag, Plane, Calendar, CreditCard } from 'lucide-react';
 import { Button } from "@/components/ui/button";
