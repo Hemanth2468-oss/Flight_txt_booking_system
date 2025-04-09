@@ -20,6 +20,22 @@ const MobileMenu = ({ onClose }: MobileMenuProps) => {
   // Check if user is Elite member
   const isEliteMember = localStorage.getItem('eliteChipMember') === 'true';
   
+  // Mock functions for the dialog components
+  const handleLogin = (data: any) => {
+    console.log('Login data:', data);
+    setLoginOpen(false);
+  };
+  
+  const handleRegister = (data: any) => {
+    console.log('Register data:', data);
+    setRegisterOpen(false);
+  };
+  
+  const handleCheckIn = (data: any) => {
+    console.log('Check-in data:', data);
+    // Normally we would process the check-in data here
+  };
+  
   return (
     <div className={`fixed inset-0 z-50 ${isEliteMember ? 'bg-gradient-to-br from-[#1A1F2C] to-[#6E59A5] text-white' : 'bg-white'}`}>
       <div className="container mx-auto px-4 py-4">
@@ -144,9 +160,33 @@ const MobileMenu = ({ onClose }: MobileMenuProps) => {
         </nav>
       </div>
       
-      {loginOpen && <LoginDialog isOpen={loginOpen} onClose={() => setLoginOpen(false)} />}
-      {registerOpen && <RegisterDialog isOpen={registerOpen} onClose={() => setRegisterOpen(false)} />}
-      {checkInOpen && <CheckInDialog isOpen={checkInOpen} onClose={() => setCheckInOpen(false)} />}
+      {loginOpen && (
+        <LoginDialog 
+          isOpen={loginOpen} 
+          setIsOpen={setLoginOpen} 
+          setIsRegisterOpen={setRegisterOpen} 
+          handleLogin={handleLogin} 
+        />
+      )}
+      
+      {registerOpen && (
+        <RegisterDialog 
+          isOpen={registerOpen} 
+          setIsOpen={setRegisterOpen} 
+          setIsLoginOpen={setLoginOpen} 
+          handleRegister={handleRegister} 
+        />
+      )}
+      
+      {checkInOpen && (
+        <CheckInDialog 
+          isOpen={checkInOpen} 
+          setIsOpen={setCheckInOpen} 
+          checkInResult={null} 
+          setCheckInResult={() => {}} 
+          handleCheckIn={handleCheckIn} 
+        />
+      )}
     </div>
   );
 };
