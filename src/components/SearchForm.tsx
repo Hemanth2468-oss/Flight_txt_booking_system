@@ -14,19 +14,16 @@ interface AirportOption {
   code: string;
   city: string;
   country: string;
+  international?: boolean;
 }
 
 interface SearchFormProps {
   onSearch: () => void;
 }
 
-// Sample airports data
+// Sample airports data with international options
 const airports: AirportOption[] = [
-  { code: 'JFK', city: 'New York', country: 'United States' },
-  { code: 'LHR', city: 'London', country: 'United Kingdom' },
-  { code: 'CDG', city: 'Paris', country: 'France' },
-  { code: 'HND', city: 'Tokyo', country: 'Japan' },
-  { code: 'DXB', city: 'Dubai', country: 'United Arab Emirates' },
+  // Domestic Indian airports
   { code: 'DEL', city: 'New Delhi', country: 'India' },
   { code: 'BOM', city: 'Mumbai', country: 'India' },
   { code: 'MAA', city: 'Chennai', country: 'India' },
@@ -35,6 +32,21 @@ const airports: AirportOption[] = [
   { code: 'CCU', city: 'Kolkata', country: 'India' },
   { code: 'COK', city: 'Kochi', country: 'India' },
   { code: 'PNQ', city: 'Pune', country: 'India' },
+  
+  // International airports
+  { code: 'JFK', city: 'New York', country: 'United States', international: true },
+  { code: 'LHR', city: 'London', country: 'United Kingdom', international: true },
+  { code: 'CDG', city: 'Paris', country: 'France', international: true },
+  { code: 'HND', city: 'Tokyo', country: 'Japan', international: true },
+  { code: 'DXB', city: 'Dubai', country: 'United Arab Emirates', international: true },
+  { code: 'SIN', city: 'Singapore', country: 'Singapore', international: true },
+  { code: 'SYD', city: 'Sydney', country: 'Australia', international: true },
+  { code: 'YYZ', city: 'Toronto', country: 'Canada', international: true },
+  { code: 'HKG', city: 'Hong Kong', country: 'China', international: true },
+  { code: 'FRA', city: 'Frankfurt', country: 'Germany', international: true },
+  { code: 'AMS', city: 'Amsterdam', country: 'Netherlands', international: true },
+  { code: 'BCN', city: 'Barcelona', country: 'Spain', international: true },
+  { code: 'ICN', city: 'Seoul', country: 'South Korea', international: true },
 ];
 
 const SearchForm = ({ onSearch }: SearchFormProps) => {

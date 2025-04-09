@@ -1,123 +1,144 @@
 
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Globe, X, Tag, CheckSquare, Plane } from 'lucide-react';
+import { X, ChevronDown, ChevronUp, PlaneTakeoff, Shield } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import LoginDialog from './LoginDialog';
+import RegisterDialog from './RegisterDialog';
+import CheckInDialog from './CheckInDialog';
 
 interface MobileMenuProps {
-  isOpen: boolean;
-  setIsOpen: (value: boolean) => void;
-  user: any;
-  handleLogout: () => void;
-  setIsLoginOpen: (value: boolean) => void;
-  setIsRegisterOpen: (value: boolean) => void;
-  setIsCheckInOpen: (value: boolean) => void;
+  onClose: () => void;
 }
 
-const MobileMenu = ({ 
-  isOpen, 
-  setIsOpen, 
-  user, 
-  handleLogout, 
-  setIsLoginOpen, 
-  setIsRegisterOpen,
-  setIsCheckInOpen 
-}: MobileMenuProps) => {
+const MobileMenu = ({ onClose }: MobileMenuProps) => {
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [registerOpen, setRegisterOpen] = useState(false);
+  const [checkInOpen, setCheckInOpen] = useState(false);
+  const [showFlights, setShowFlights] = useState(false);
+  
   return (
-    <div 
-      className={`fixed inset-0 z-40 bg-white transform transition-transform duration-300 ease-in-out ${
-        isOpen ? 'translate-x-0' : 'translate-x-full'
-      } md:hidden`}
-    >
-      <div className="flex flex-col p-8 h-full">
-        <div className="flex justify-between items-center mb-8">
-          <Link 
-            to="/"
-            className="text-2xl font-pacifico text-primary-600"
-            onClick={() => setIsOpen(false)}
-          >
-            Fly Elite
-            <Plane className="ml-2 h-5 w-5 text-primary-600 transform rotate-45 inline-block" />
+    <div className="fixed inset-0 z-50 bg-white">
+      <div className="container mx-auto px-4 py-4">
+        <div className="flex justify-between items-center mb-6">
+          <Link to="/" onClick={onClose} className="text-xl font-bold text-primary-600">
+            FlyElite
           </Link>
-          <button 
-            onClick={() => setIsOpen(false)}
-            className="text-gray-700 hover:text-primary-600 transition-colors duration-200"
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            className="text-gray-700"
           >
-            <X className="w-6 h-6" />
-          </button>
+            <X className="h-6 w-6" />
+          </Button>
         </div>
         
-        <div className="flex flex-col space-y-6 mb-8">
-          <Link 
-            to="/flights" 
-            className="text-lg text-gray-700 hover:text-primary-600 transition-colors duration-200"
-            onClick={() => setIsOpen(false)}
-          >
-            Flights
-          </Link>
-          <Link 
-            to="/deals" 
-            className="text-lg text-gray-700 hover:text-primary-600 transition-colors duration-200 flex items-center"
-            onClick={() => setIsOpen(false)}
-          >
-            <Tag className="mr-2 h-5 w-5" />
-            Deals & Offers
-          </Link>
-          <button 
-            onClick={() => {
-              setIsOpen(false);
-              setIsCheckInOpen(true);
-            }}
-            className="text-lg text-gray-700 hover:text-primary-600 transition-colors duration-200 flex items-center"
-          >
-            <CheckSquare className="mr-2 h-5 w-5" />
-            Check-in
-          </button>
-        </div>
-        
-        <div className="flex flex-col space-y-4 mt-auto">
-          {user ? (
-            <>
-              <div className="text-sm text-gray-700 mb-2">
-                <span>Welcome, </span>
-                <span className="font-medium">{user.firstName}</span>
-              </div>
-              <button 
-                onClick={() => {
-                  handleLogout();
-                  setIsOpen(false);
-                }}
-                className="px-4 py-3 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300 w-full shadow-sm hover:shadow glow-button"
+        <nav className="space-y-6">
+          <ul className="space-y-4">
+            <li>
+              <Link
+                to="/"
+                onClick={onClose}
+                className="block py-2 text-gray-800 hover:text-primary-600 transition-colors"
               >
-                Sign Out
-              </button>
-            </>
-          ) : (
-            <>
+                Home
+              </Link>
+            </li>
+            <li>
               <button 
-                onClick={() => {
-                  setIsLoginOpen(true);
-                  setIsOpen(false);
-                }}
-                className="px-4 py-3 text-primary-600 hover:bg-primary-50 rounded-button transition-colors duration-200 w-full"
+                className="flex items-center justify-between w-full py-2 text-gray-800 hover:text-primary-600 transition-colors"
+                onClick={() => setShowFlights(!showFlights)}
               >
-                Sign In
+                <span>Flights</span>
+                {showFlights ? (
+                  <ChevronUp className="h-5 w-5" />
+                ) : (
+                  <ChevronDown className="h-5 w-5" />
+                )}
               </button>
+              
+              {showFlights && (
+                <ul className="pl-4 mt-2 space-y-2 border-l border-gray-200">
+                  <li>
+                    <Link
+                      to="/flights"
+                      onClick={onClose}
+                      className="block py-2 text-gray-700 hover:text-primary-600 transition-colors"
+                    >
+                      Book Flights
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/private-jets"
+                      onClick={onClose}
+                      className="block py-2 text-gray-700 hover:text-primary-600 transition-colors flex items-center gap-2"
+                    >
+                      <PlaneTakeoff className="h-4 w-4" />
+                      Private Jets
+                    </Link>
+                  </li>
+                </ul>
+              )}
+            </li>
+            <li>
+              <Link
+                to="/deals"
+                onClick={onClose}
+                className="block py-2 text-gray-800 hover:text-primary-600 transition-colors"
+              >
+                Deals
+              </Link>
+            </li>
+            <li>
               <button 
+                className="flex items-center gap-2 py-2 text-gray-800 hover:text-primary-600 transition-colors"
                 onClick={() => {
-                  setIsRegisterOpen(true);
-                  setIsOpen(false);
+                  onClose();
+                  // Open Elite Chip modal - would need to refactor EliteChip component to accept an open prop
                 }}
-                className="px-4 py-3 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300 w-full shadow-sm hover:shadow glow-button"
               >
-                Register
+                <Shield className="h-4 w-4" />
+                Elite Chip
               </button>
-            </>
-          )}
-          <button className="flex items-center justify-center space-x-2 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-button transition-colors duration-200 w-full mt-4">
-            <Globe className="w-5 h-5" />
-            <span>English</span>
-          </button>
-        </div>
+            </li>
+          </ul>
+          
+          <div className="space-y-3 pt-4 border-t border-gray-200">
+            <Button
+              variant="outline"
+              className="w-full justify-start"
+              onClick={() => {
+                setLoginOpen(true);
+              }}
+            >
+              Log In
+            </Button>
+            <Button
+              className="w-full justify-start"
+              onClick={() => {
+                setRegisterOpen(true);
+              }}
+            >
+              Sign Up
+            </Button>
+            <Button
+              variant="ghost"
+              className="w-full justify-start"
+              onClick={() => {
+                setCheckInOpen(true);
+              }}
+            >
+              Check-in
+            </Button>
+          </div>
+        </nav>
       </div>
+      
+      <LoginDialog open={loginOpen} onOpenChange={setLoginOpen} />
+      <RegisterDialog open={registerOpen} onOpenChange={setRegisterOpen} />
+      <CheckInDialog open={checkInOpen} onOpenChange={setCheckInOpen} />
     </div>
   );
 };
