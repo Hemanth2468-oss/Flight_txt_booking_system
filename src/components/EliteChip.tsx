@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Badge, Shield, Star, Sparkles, Crown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import {
@@ -12,27 +12,49 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 const EliteChip = () => {
   const [open, setOpen] = useState(false);
+  const [isEliteMember, setIsEliteMember] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
+  
+  // Check if user is already an Elite member
+  useEffect(() => {
+    const eliteMembership = localStorage.getItem('eliteChipMember');
+    if (eliteMembership) {
+      setIsEliteMember(true);
+    }
+  }, []);
   
   const handleJoin = () => {
     setOpen(false);
+    // Store Elite membership in localStorage
+    localStorage.setItem('eliteChipMember', 'true');
+    setIsEliteMember(true);
+    
     toast({
       title: "Welcome to Elite Chip!",
       description: "You've successfully joined our premium loyalty program.",
       variant: "default",
       duration: 5000,
     });
+    
+    // Redirect to home page to show premium experience
+    navigate('/');
   };
   
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="bg-gradient-to-r from-[#6E59A5] to-[#9b87f5] text-white border-none hover:from-[#8B5CF6] hover:to-[#D6BCFA] hover:text-white flex items-center gap-2 shadow-sm py-2">
+        <Button 
+          variant="outline" 
+          className={`${isEliteMember ? 'bg-gradient-to-r from-[#FFD700] to-[#B8860B]' : 'bg-gradient-to-r from-[#6E59A5] to-[#9b87f5]'} 
+          text-white border-none hover:from-[#8B5CF6] hover:to-[#D6BCFA] hover:text-white flex items-center gap-2 shadow-sm py-2`}
+        >
           <Shield className="h-4 w-4" />
-          <span className="font-medium">Elite Chip</span>
+          <span className="font-medium">{isEliteMember ? 'Elite Member' : 'Elite Chip'}</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">

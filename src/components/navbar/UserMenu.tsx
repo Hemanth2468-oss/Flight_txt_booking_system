@@ -7,6 +7,9 @@ interface UserMenuProps {
 }
 
 const UserMenu = ({ user, handleLogout, setIsLoginOpen, setIsRegisterOpen }: UserMenuProps) => {
+  // Check if user is Elite member
+  const isEliteMember = localStorage.getItem('eliteChipMember') === 'true';
+  
   return (
     <>
       {user ? (
@@ -14,10 +17,15 @@ const UserMenu = ({ user, handleLogout, setIsLoginOpen, setIsRegisterOpen }: Use
           <div className="text-sm text-gray-700">
             <span>Welcome, </span>
             <span className="font-medium">{user.firstName}</span>
+            {isEliteMember && (
+              <span className="ml-2 px-2 py-0.5 bg-gradient-to-r from-[#FFD700] to-[#B8860B] text-white text-xs rounded-full">
+                Elite
+              </span>
+            )}
           </div>
           <button 
             onClick={handleLogout}
-            className="px-4 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300 shadow-sm hover:shadow glow-button"
+            className={`px-4 py-2 ${isEliteMember ? 'bg-[#FFD700] text-[#1A1F2C] hover:bg-[#e6c200]' : 'bg-primary-600 text-white hover:bg-primary-700'} rounded-button transition-all duration-300 shadow-sm hover:shadow glow-button`}
           >
             Sign Out
           </button>
@@ -32,7 +40,7 @@ const UserMenu = ({ user, handleLogout, setIsLoginOpen, setIsRegisterOpen }: Use
           </button>
           <button 
             onClick={() => setIsRegisterOpen(true)}
-            className="px-4 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300 shadow-sm hover:shadow glow-button"
+            className={`px-4 py-2 ${isEliteMember ? 'bg-[#FFD700] text-[#1A1F2C] hover:bg-[#e6c200]' : 'bg-primary-600 text-white hover:bg-primary-700'} rounded-button transition-all duration-300 shadow-sm hover:shadow glow-button`}
           >
             Register
           </button>

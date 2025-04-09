@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { MenuIcon, X } from 'lucide-react';
+import { MenuIcon, X, PlaneTakeoff } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import MobileMenu from './MobileMenu';
 import NavLinks from './NavLinks';
@@ -11,8 +11,6 @@ import {
   NavigationMenu, 
   NavigationMenuList, 
   NavigationMenuItem,
-  NavigationMenuTrigger,
-  NavigationMenuContent,
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
@@ -20,7 +18,21 @@ import { cn } from "@/lib/utils";
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
   const location = useLocation();
+  
+  // Check if user is Elite member
+  const isEliteMember = localStorage.getItem('eliteChipMember') === 'true';
+  
+  // Check if user is logged in
+  useEffect(() => {
+    const storedUser = localStorage.getItem('flyEliteUser');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
   
   // Change navbar background when scrolling
   useEffect(() => {
@@ -43,17 +55,24 @@ const Navbar = () => {
   
   const isHomePage = location.pathname === '/';
   
+  // Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem('flyEliteUser');
+    setUser(null);
+  };
+  
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
-        isScrolled || !isHomePage ? 'bg-white shadow-sm' : 'bg-transparent'
+        isScrolled || !isHomePage ? 'bg-white shadow-sm' : isEliteMember ? 'bg-gradient-to-r from-[#1A1F2C] to-[#6E59A5] text-white' : 'bg-transparent'
       }`}
     >
       <div className="container mx-auto px-4">
         <nav className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <span className="text-xl font-bold text-primary-600">
+            <PlaneTakeoff className={`h-6 w-6 mr-2 ${isEliteMember ? 'text-[#FFD700]' : 'text-primary-600'}`} />
+            <span className={`text-xl font-bold ${isEliteMember ? 'font-serif text-[#FFD700]' : 'text-primary-600'}`}>
               FlyElite
             </span>
           </Link>
@@ -110,7 +129,12 @@ const Navbar = () => {
           
           {/* User Menu */}
           <div className="hidden md:flex items-center space-x-2">
-            <UserMenu />
+            <UserMenu 
+              user={user} 
+              handleLogout={handleLogout} 
+              setIsLoginOpen={setIsLoginOpen} 
+              setIsRegisterOpen={setIsRegisterOpen} 
+            />
           </div>
           
           {/* Mobile Menu Toggle */}
@@ -119,7 +143,7 @@ const Navbar = () => {
               variant="ghost"
               size="icon"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-gray-700"
+              className={`${isEliteMember && !isScrolled && isHomePage ? 'text-white' : 'text-gray-700'}`}
             >
               {mobileMenuOpen ? (
                 <X className="h-6 w-6" />
@@ -133,7 +157,9 @@ const Navbar = () => {
       
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <MobileMenu onClose={() => setMobileMenuOpen(false)} />
+        <MobileMenu 
+          onClose={() => setMobileMenuOpen(false)} 
+        />
       )}
     </header>
   );
