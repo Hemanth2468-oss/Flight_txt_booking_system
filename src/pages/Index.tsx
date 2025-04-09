@@ -8,10 +8,12 @@ import Benefits from '../components/Benefits';
 import AppPromo from '../components/AppPromo';
 import Partners from '../components/Partners';
 import Footer from '../components/Footer';
+import { Star, Shield, PlaneTakeoff, Sparkles } from 'lucide-react';
 
 const Index = () => {
   // Check if user is an Elite member
   const [isEliteMember, setIsEliteMember] = useState(false);
+  const [userDetails, setUserDetails] = useState<any>(null);
   
   useEffect(() => {
     // Scroll to top when the component mounts
@@ -19,49 +21,68 @@ const Index = () => {
     
     // Check Elite membership status
     const eliteMembership = localStorage.getItem('eliteChipMember');
-    if (eliteMembership) {
+    const eliteUserDetails = localStorage.getItem('eliteChipUserDetails');
+    
+    if (eliteMembership === 'true') {
       setIsEliteMember(true);
+      if (eliteUserDetails) {
+        setUserDetails(JSON.parse(eliteUserDetails));
+      }
     }
   }, []);
   
   return (
-    <div className={`flex flex-col min-h-screen ${isEliteMember ? 'bg-gradient-to-br from-[#1A1F2C]/5 to-[#6E59A5]/5' : 'bg-white'}`}>
+    <div className={`flex flex-col min-h-screen ${isEliteMember ? 'bg-gradient-to-br from-[#1A1F2C]/10 to-[#6E59A5]/10' : 'bg-white'}`}>
       <Navbar />
       
       <main className="flex-grow pt-16">
         <Hero />
+        
         {isEliteMember && (
-          <div className="container mx-auto px-4 py-8">
-            <div className="bg-gradient-to-r from-[#1A1F2C] to-[#6E59A5] rounded-lg p-6 text-white">
+          <div className="container mx-auto px-4 py-8 animate-fade-in">
+            <div className="bg-gradient-to-r from-[#1A1F2C] to-[#6E59A5] rounded-lg p-6 text-white shadow-lg transform hover:scale-[1.01] transition-all duration-300">
               <div className="flex items-center mb-4">
                 <div className="bg-[#FFD700] p-2 rounded-full mr-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#1A1F2C]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <Sparkles className="h-6 w-6 text-[#1A1F2C]" />
                 </div>
-                <h2 className="text-xl font-bold">Welcome to Elite Experience</h2>
+                <h2 className="text-xl font-bold font-serif">Welcome to Your Elite Experience, {userDetails?.firstName || 'Elite Member'}</h2>
               </div>
-              <p className="text-white/80 mb-4">
-                As an Elite Chip member, you now have access to exclusive benefits and premium services.
-                Enjoy priority boarding, lounge access, and special discounts on all your bookings.
+              <p className="text-white/90 mb-6 italic">
+                "Experience luxury at every step of your journey with exclusive Elite Chip privileges."
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                <div className="bg-white/10 p-3 rounded">
-                  <p className="font-medium">Premium Support</p>
-                  <p className="text-white/70">24/7 dedicated assistance</p>
+                <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg shadow-inner transform hover:-translate-y-1 transition-all duration-300">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Shield className="h-5 w-5 text-[#FFD700]" />
+                    <p className="font-medium">Premium Support</p>
+                  </div>
+                  <p className="text-white/80 text-xs">24/7 dedicated personal assistance for all your travel needs</p>
                 </div>
-                <div className="bg-white/10 p-3 rounded">
-                  <p className="font-medium">Exclusive Discounts</p>
-                  <p className="text-white/70">Up to 15% off on all bookings</p>
+                <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg shadow-inner transform hover:-translate-y-1 transition-all duration-300">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Star className="h-5 w-5 text-[#FFD700]" />
+                    <p className="font-medium">Exclusive Discounts</p>
+                  </div>
+                  <p className="text-white/80 text-xs">Up to 15% off on all bookings, including private jets</p>
                 </div>
-                <div className="bg-white/10 p-3 rounded">
-                  <p className="font-medium">Priority Services</p>
-                  <p className="text-white/70">Skip the lines at airports</p>
+                <div className="bg-white/10 backdrop-blur-sm p-4 rounded-lg shadow-inner transform hover:-translate-y-1 transition-all duration-300">
+                  <div className="flex items-center gap-2 mb-2">
+                    <PlaneTakeoff className="h-5 w-5 text-[#FFD700]" />
+                    <p className="font-medium">Priority Services</p>
+                  </div>
+                  <p className="text-white/80 text-xs">Skip the lines with expedited check-in and boarding</p>
+                </div>
+              </div>
+              <div className="mt-6 flex justify-end">
+                <div className="bg-black/20 backdrop-blur-md px-4 py-2 rounded-full inline-flex items-center">
+                  <span className="text-[#FFD700] font-bold mr-1">ELITE</span>
+                  <span className="text-white/80 text-xs">MEMBER SINCE APR 2025</span>
                 </div>
               </div>
             </div>
           </div>
         )}
+        
         <Features />
         <Destinations />
         <Benefits />
