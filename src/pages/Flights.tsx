@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Tag, TrendingDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import Navbar from '../components/Navbar';
+import Navbar from '../components/navbar';
 import FlightResults from '../components/FlightResults';
 import Footer from '../components/Footer';
 
