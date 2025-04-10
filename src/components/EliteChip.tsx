@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Badge, Shield, Star, Sparkles, Crown, Download, X, LogOut } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -114,14 +115,16 @@ const EliteChip = () => {
           <span className="font-medium">{isEliteMember ? 'Elite Member' : 'Elite Chip'}</span>
           
           {isEliteMember && (
-            <LogOut 
-              className="h-4 w-4 ml-1 text-white" 
+            <div 
               onClick={(e) => {
                 e.stopPropagation();
                 handleExitElite();
-              }} 
+              }}
               title="Exit Elite Membership"
-            />
+              className="ml-1 cursor-pointer"
+            >
+              <LogOut className="h-4 w-4 text-white" />
+            </div>
           )}
         </Button>
       </DialogTrigger>
