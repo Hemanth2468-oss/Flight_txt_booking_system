@@ -87,6 +87,12 @@ const EliteChip = () => {
     setStep(1);
   };
   
+  const handleMaybeLater = () => {
+    // Reset the step to 1 and close the dialog
+    setStep(1);
+    setOpen(false);
+  };
+  
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -177,7 +183,12 @@ const EliteChip = () => {
             </div>
             
             <DialogFooter>
-              <Button variant="outline" onClick={() => setOpen(false)}>Maybe Later</Button>
+              <Button 
+                variant="outline" 
+                onClick={handleMaybeLater}
+              >
+                Maybe Later
+              </Button>
               <Button 
                 className="bg-[#8B5CF6] hover:bg-[#7E69AB]"
                 onClick={handleContinue}
