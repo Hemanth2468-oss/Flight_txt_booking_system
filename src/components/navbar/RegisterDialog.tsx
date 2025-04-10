@@ -1,4 +1,5 @@
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,6 +14,7 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useToast } from "@/hooks/use-toast";
 
 const registerSchema = z.object({
   firstName: z.string().min(2, { message: "First name must be at least 2 characters" }),
@@ -33,6 +35,9 @@ interface RegisterDialogProps {
 }
 
 const RegisterDialog = ({ isOpen, setIsOpen, setIsLoginOpen, handleRegister }: RegisterDialogProps) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+  
   const registerForm = useForm({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -43,6 +48,39 @@ const RegisterDialog = ({ isOpen, setIsOpen, setIsLoginOpen, handleRegister }: R
       confirmPassword: "",
     },
   });
+
+  const onSubmit = (data: z.infer<typeof registerSchema>) => {
+    setIsSubmitting(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      // Create user object (excluding password for security)
+      const user = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+      };
+      
+      // Store user in localStorage
+      localStorage.setItem('flyEliteUser', JSON.stringify(user));
+      
+      // Call the handleRegister function
+      handleRegister(user);
+      
+      // Show success toast
+      toast({
+        title: "Registration Successful",
+        description: `Welcome to FlyElite, ${data.firstName}!`,
+        variant: "default",
+      });
+      
+      setIsSubmitting(false);
+      setIsOpen(false);
+      
+      // Refresh the page to update UI state
+      window.location.reload();
+    }, 1000);
+  };
 
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
@@ -55,7 +93,7 @@ const RegisterDialog = ({ isOpen, setIsOpen, setIsLoginOpen, handleRegister }: R
         </AlertDialogHeader>
         
         <Form {...registerForm}>
-          <form onSubmit={registerForm.handleSubmit(handleRegister)} className="space-y-4 py-4">
+          <form onSubmit={registerForm.handleSubmit(onSubmit)} className="space-y-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={registerForm.control}
@@ -158,7 +196,13 @@ const RegisterDialog = ({ isOpen, setIsOpen, setIsLoginOpen, handleRegister }: R
                 <button type="button" className="px-4 py-2 text-gray-700 border border-gray-300 rounded-button hover:bg-gray-50">Cancel</button>
               </AlertDialogCancel>
               <AlertDialogAction asChild>
-                <button type="submit" className="px-4 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300">Register</button>
+                <button 
+                  type="submit" 
+                  className="px-4 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Registering...' : 'Register'}
+                </button>
               </AlertDialogAction>
             </AlertDialogFooter>
           </form>

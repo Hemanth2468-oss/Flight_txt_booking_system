@@ -1,4 +1,5 @@
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,6 +14,7 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useToast } from "@/hooks/use-toast";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -27,6 +29,9 @@ interface LoginDialogProps {
 }
 
 const LoginDialog = ({ isOpen, setIsOpen, setIsRegisterOpen, handleLogin }: LoginDialogProps) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+  
   const loginForm = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -34,6 +39,39 @@ const LoginDialog = ({ isOpen, setIsOpen, setIsRegisterOpen, handleLogin }: Logi
       password: "",
     },
   });
+
+  const onSubmit = (data: z.infer<typeof loginSchema>) => {
+    setIsSubmitting(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      // Create simple user object
+      const user = {
+        firstName: "John",
+        lastName: "Doe",
+        email: data.email,
+      };
+      
+      // Store user in localStorage
+      localStorage.setItem('flyEliteUser', JSON.stringify(user));
+      
+      // Call the handleLogin function
+      handleLogin(user);
+      
+      // Show success toast
+      toast({
+        title: "Login Successful",
+        description: "Welcome back to FlyElite!",
+        variant: "default",
+      });
+      
+      setIsSubmitting(false);
+      setIsOpen(false);
+      
+      // Refresh the page to update UI state
+      window.location.reload();
+    }, 1000);
+  };
 
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
@@ -46,7 +84,7 @@ const LoginDialog = ({ isOpen, setIsOpen, setIsRegisterOpen, handleLogin }: Logi
         </AlertDialogHeader>
         
         <Form {...loginForm}>
-          <form onSubmit={loginForm.handleSubmit(handleLogin)} className="space-y-4 py-4">
+          <form onSubmit={loginForm.handleSubmit(onSubmit)} className="space-y-4 py-4">
             <FormField
               control={loginForm.control}
               name="email"
@@ -90,7 +128,13 @@ const LoginDialog = ({ isOpen, setIsOpen, setIsRegisterOpen, handleLogin }: Logi
                 <button type="button" className="px-4 py-2 text-gray-700 border border-gray-300 rounded-button hover:bg-gray-50">Cancel</button>
               </AlertDialogCancel>
               <AlertDialogAction asChild>
-                <button type="submit" className="px-4 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300">Sign In</button>
+                <button 
+                  type="submit" 
+                  className="px-4 py-2 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Signing in...' : 'Sign In'}
+                </button>
               </AlertDialogAction>
             </AlertDialogFooter>
           </form>

@@ -7,6 +7,8 @@ import MobileMenu from './MobileMenu';
 import NavLinks from './NavLinks';
 import UserMenu from './UserMenu';
 import EliteChip from '../EliteChip';
+import LoginDialog from './LoginDialog';
+import RegisterDialog from './RegisterDialog';
 import { 
   NavigationMenu, 
   NavigationMenuList, 
@@ -14,6 +16,7 @@ import {
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -22,6 +25,7 @@ const Navbar = () => {
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   const location = useLocation();
+  const { toast } = useToast();
   
   // Check if user is Elite member
   const isEliteMember = localStorage.getItem('eliteChipMember') === 'true';
@@ -55,10 +59,28 @@ const Navbar = () => {
   
   const isHomePage = location.pathname === '/';
   
+  // Handle login function
+  const handleLogin = (userData: any) => {
+    setUser(userData);
+    setIsLoginOpen(false);
+  };
+  
+  // Handle register function
+  const handleRegister = (userData: any) => {
+    setUser(userData);
+    setIsRegisterOpen(false);
+  };
+  
   // Handle logout
   const handleLogout = () => {
     localStorage.removeItem('flyEliteUser');
     setUser(null);
+    
+    toast({
+      title: "Logged Out",
+      description: "You have been successfully logged out.",
+      variant: "default",
+    });
   };
   
   return (
@@ -159,6 +181,26 @@ const Navbar = () => {
       {mobileMenuOpen && (
         <MobileMenu 
           onClose={() => setMobileMenuOpen(false)} 
+        />
+      )}
+      
+      {/* Login Dialog */}
+      {isLoginOpen && (
+        <LoginDialog 
+          isOpen={isLoginOpen} 
+          setIsOpen={setIsLoginOpen} 
+          setIsRegisterOpen={setIsRegisterOpen} 
+          handleLogin={handleLogin} 
+        />
+      )}
+      
+      {/* Register Dialog */}
+      {isRegisterOpen && (
+        <RegisterDialog 
+          isOpen={isRegisterOpen} 
+          setIsOpen={setIsRegisterOpen} 
+          setIsLoginOpen={setIsLoginOpen} 
+          handleRegister={handleRegister} 
         />
       )}
     </header>
