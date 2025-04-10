@@ -49,7 +49,7 @@ interface CharterBookingFormProps {
 
 const CharterBookingForm = ({ jet, isOpen, onClose }: CharterBookingFormProps) => {
   const [showTicket, setShowTicket] = useState(false);
-  const [bookingDetails, setBookingDetails] = useState<any>(null);
+  const [bookingData, setBookingData] = useState<any>(null);
   const { toast } = useToast();
   
   const generateBookingNumber = () => {
@@ -71,16 +71,30 @@ const CharterBookingForm = ({ jet, isOpen, onClose }: CharterBookingFormProps) =
   });
   
   const onSubmit = (values: FormValues) => {
+    // Format the dates for display
+    const formatDate = (date: Date) => {
+      return format(date, "dd MMM yyyy");
+    };
+
+    // Create booking object in the format expected by PremiumTicket
     const booking = {
-      ...values,
       bookingNumber: generateBookingNumber(),
-      jet: jet,
-      bookingDate: new Date(),
-      price: jet.price,
+      bookingDate: format(new Date(), "dd MMM yyyy"),
+      firstName: values.firstName,
+      lastName: values.lastName,
+      departure: values.departure,
+      destination: values.destination,
+      departureDate: formatDate(values.departureDate),
+      returnDate: values.returnDate ? formatDate(values.returnDate) : null,
+      jet: {
+        name: jet.name,
+        passengers: jet.passengers
+      },
       status: 'Confirmed',
+      totalAmount: jet.price,
     };
     
-    setBookingDetails(booking);
+    setBookingData(booking);
     setShowTicket(true);
     
     toast({
@@ -326,9 +340,9 @@ const CharterBookingForm = ({ jet, isOpen, onClose }: CharterBookingFormProps) =
         </DialogContent>
       </Dialog>
       
-      {showTicket && bookingDetails && (
+      {showTicket && bookingData && (
         <PremiumTicket 
-          bookingDetails={bookingDetails}
+          booking={bookingData}
           isOpen={showTicket} 
           onClose={() => {
             setShowTicket(false);

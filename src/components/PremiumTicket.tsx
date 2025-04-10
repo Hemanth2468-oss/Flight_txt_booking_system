@@ -1,5 +1,5 @@
-
 import { PlaneTakeoff, ArrowRight, QrCode } from 'lucide-react';
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 interface PremiumTicketProps {
   booking: {
@@ -18,10 +18,12 @@ interface PremiumTicketProps {
     status: string;
     totalAmount: string;
   };
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
-const PremiumTicket = ({ booking }: PremiumTicketProps) => {
-  return (
+const PremiumTicket = ({ booking, isOpen, onClose }: PremiumTicketProps) => {
+  const ticketContent = (
     <div className="w-full bg-white p-6 rounded-lg">
       {/* Header */}
       <div className="flex justify-between items-center border-b border-gray-200 pb-4 mb-4">
@@ -157,6 +159,26 @@ const PremiumTicket = ({ booking }: PremiumTicketProps) => {
       </div>
     </div>
   );
+
+  if (isOpen !== undefined && onClose) {
+    return (
+      <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
+          {ticketContent}
+          <div className="mt-4 flex justify-end">
+            <button 
+              onClick={onClose}
+              className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/90"
+            >
+              Close
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  return ticketContent;
 };
 
 export default PremiumTicket;
