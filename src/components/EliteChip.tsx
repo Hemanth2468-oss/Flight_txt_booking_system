@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from 'react';
-import { Badge, Shield, Star, Sparkles, Crown, Download, X } from 'lucide-react';
+import { Badge, Shield, Star, Sparkles, Crown, Download, X, LogOut } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -27,7 +26,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-// Form validation schema
 const formSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
   lastName: z.string().min(2, "Last name must be at least 2 characters"),
@@ -42,7 +40,6 @@ const EliteChip = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   
-  // Check if user is already an Elite member
   useEffect(() => {
     const eliteMembership = localStorage.getItem('eliteChipMember');
     if (eliteMembership) {
@@ -50,7 +47,6 @@ const EliteChip = () => {
     }
   }, []);
   
-  // Initialize form
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -62,7 +58,6 @@ const EliteChip = () => {
   });
   
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    // Store user details in localStorage
     localStorage.setItem('eliteChipUserDetails', JSON.stringify(values));
     localStorage.setItem('eliteChipMember', 'true');
     setIsEliteMember(true);
@@ -75,7 +70,6 @@ const EliteChip = () => {
       duration: 5000,
     });
     
-    // Redirect to home page to show premium experience
     navigate('/');
   };
   
@@ -88,9 +82,24 @@ const EliteChip = () => {
   };
   
   const handleMaybeLater = () => {
-    // Reset the step to 1 and close the dialog
     setStep(1);
     setOpen(false);
+  };
+  
+  const handleExitElite = () => {
+    localStorage.removeItem('eliteChipMember');
+    localStorage.removeItem('eliteChipUserDetails');
+    setIsEliteMember(false);
+    
+    setOpen(false);
+    
+    toast({
+      title: "Elite Membership Cancelled",
+      description: "You've successfully exited the Elite Chip program.",
+      variant: "default",
+    });
+    
+    window.location.reload();
   };
   
   return (
@@ -98,15 +107,26 @@ const EliteChip = () => {
       <DialogTrigger asChild>
         <Button 
           variant="outline" 
-          className={`${isEliteMember ? 'bg-gradient-to-r from-[#FFD700] to-[#B8860B]' : 'bg-gradient-to-r from-[#6E59A5] to-[#9b87f5]'} 
-          text-white border-none hover:from-[#8B5CF6] hover:to-[#D6BCFA] hover:text-white flex items-center gap-2 shadow-sm py-2`}
+          className={`${isEliteMember ? 'bg-gradient-to-r from-[#1A1F2C] to-[#6E59A5]' : 'bg-gradient-to-r from-[#6E59A5] to-[#9b87f5]'} 
+          text-white border-none hover:from-[#8B5CF6] hover:to-[#D6BCFA] hover:text-white flex items-center gap-2 shadow-sm py-2 relative`}
         >
           <Shield className="h-4 w-4" />
           <span className="font-medium">{isEliteMember ? 'Elite Member' : 'Elite Chip'}</span>
+          
+          {isEliteMember && (
+            <LogOut 
+              className="h-4 w-4 ml-1 text-white" 
+              onClick={(e) => {
+                e.stopPropagation();
+                handleExitElite();
+              }} 
+              title="Exit Elite Membership"
+            />
+          )}
         </Button>
       </DialogTrigger>
+      
       <DialogContent className="sm:max-w-md">
-        {/* Exit button in the top-right corner */}
         <DialogClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>

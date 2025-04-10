@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { PlaneTakeoff, Users, Globe, Gauge, ArrowRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -8,7 +7,6 @@ const PrivateJets = () => {
   const [selectedJet, setSelectedJet] = useState<any>(null);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   
-  // Check if user is Elite member
   const isEliteMember = localStorage.getItem('eliteChipMember') === 'true';
   
   const jets = [
@@ -183,7 +181,7 @@ const PrivateJets = () => {
           {isEliteMember && (
             <div className="mt-6 p-4 bg-gradient-to-r from-[#1A1F2C]/10 to-[#6E59A5]/10 rounded-lg inline-block">
               <p className="text-sm text-gray-800 flex items-center">
-                <PlaneTakeoff className="h-4 w-4 text-[#FFD700] mr-2" />
+                <PlaneTakeoff className="h-4 w-4 text-[#6E59A5] mr-2" />
                 <span className="font-medium">Elite Chip Member Discount Applied: <span className="text-[#6E59A5]">15% Off</span></span>
               </p>
             </div>
@@ -199,14 +197,12 @@ const PrivateJets = () => {
               }`}
             >
               <div className="relative h-56 group overflow-hidden">
-                {/* Main jet image */}
                 <img src={jet.image} alt={jet.name} className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105" />
                 
-                {/* Gallery image overlay on hover */}
                 <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
                   <div className="flex space-x-2">
                     {jet.galleryImages && jet.galleryImages.map((image, index) => (
-                      <div key={index} className="w-16 h-16 rounded-md overflow-hidden border-2 border-white hover:border-[#FFD700] transition-all duration-200">
+                      <div key={index} className="w-16 h-16 rounded-md overflow-hidden border-2 border-white hover:border-[#6E59A5] transition-all duration-200">
                         <img src={image} alt={`${jet.name} interior ${index + 1}`} className="w-full h-full object-cover" />
                       </div>
                     ))}
@@ -214,7 +210,7 @@ const PrivateJets = () => {
                 </div>
                 
                 {isEliteMember && (
-                  <div className="absolute top-3 right-3 px-2 py-1 bg-gradient-to-r from-[#FFD700] to-[#B8860B] text-white text-xs font-bold rounded">
+                  <div className="absolute top-3 right-3 px-2 py-1 bg-gradient-to-r from-[#1A1F2C] to-[#6E59A5] text-white text-xs font-bold rounded">
                     15% OFF
                   </div>
                 )}
@@ -249,11 +245,7 @@ const PrivateJets = () => {
                   
                   <Button 
                     onClick={() => handleBookCharter(jet)} 
-                    className={`${
-                      isEliteMember 
-                        ? 'bg-gradient-to-r from-[#1A1F2C] to-[#6E59A5] text-white hover:opacity-90' 
-                        : 'bg-primary-600 hover:bg-primary-700 text-white'
-                    }`}
+                    className="bg-gradient-to-r from-[#1A1F2C] to-[#6E59A5] text-white hover:opacity-90"
                   >
                     Book Charter
                     <ArrowRight className="ml-1 h-4 w-4" />
