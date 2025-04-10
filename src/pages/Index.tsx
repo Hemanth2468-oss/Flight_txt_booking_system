@@ -8,12 +8,14 @@ import Benefits from '../components/Benefits';
 import AppPromo from '../components/AppPromo';
 import Partners from '../components/Partners';
 import Footer from '../components/Footer';
-import { Star, Shield, PlaneTakeoff, Sparkles } from 'lucide-react';
+import { Star, Shield, PlaneTakeoff, Sparkles, LogOut } from 'lucide-react';
+import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
   // Check if user is an Elite member
   const [isEliteMember, setIsEliteMember] = useState(false);
   const [userDetails, setUserDetails] = useState<any>(null);
+  const { toast } = useToast();
   
   useEffect(() => {
     // Scroll to top when the component mounts
@@ -31,6 +33,20 @@ const Index = () => {
     }
   }, []);
   
+  // Handle exit from Elite membership
+  const handleExitElite = () => {
+    localStorage.removeItem('eliteChipMember');
+    localStorage.removeItem('eliteChipUserDetails');
+    setIsEliteMember(false);
+    setUserDetails(null);
+    
+    toast({
+      title: "Elite Membership Cancelled",
+      description: "You've successfully exited the Elite Chip program.",
+      variant: "default",
+    });
+  };
+  
   return (
     <div className={`flex flex-col min-h-screen ${isEliteMember ? 'bg-gradient-to-br from-[#1A1F2C]/10 to-[#6E59A5]/10' : 'bg-white'}`}>
       <Navbar />
@@ -40,7 +56,16 @@ const Index = () => {
         
         {isEliteMember && (
           <div className="container mx-auto px-4 py-8 animate-fade-in">
-            <div className="bg-gradient-to-r from-[#1A1F2C] to-[#6E59A5] rounded-lg p-6 text-white shadow-lg transform hover:scale-[1.01] transition-all duration-300">
+            <div className="bg-gradient-to-r from-[#1A1F2C] to-[#6E59A5] rounded-lg p-6 text-white shadow-lg transform hover:scale-[1.01] transition-all duration-300 relative">
+              <button 
+                onClick={handleExitElite}
+                className="absolute top-4 right-4 flex items-center gap-1 px-3 py-1.5 bg-black/30 hover:bg-black/50 rounded-full text-sm transition-all duration-200"
+                title="Exit Elite Membership"
+              >
+                <LogOut className="h-3.5 w-3.5" />
+                <span>Exit Elite</span>
+              </button>
+              
               <div className="flex items-center mb-4">
                 <div className="bg-[#FFD700] p-2 rounded-full mr-4">
                   <Sparkles className="h-6 w-6 text-[#1A1F2C]" />
