@@ -1,11 +1,15 @@
+
 import { useState } from 'react';
-import { PlaneTakeoff, Users, Globe, Gauge, ArrowRight } from 'lucide-react';
+import { PlaneTakeoff, Users, Globe, Gauge, ArrowRight, Image } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import CharterBookingForm from './CharterBookingForm';
+import JetImageGallery from './JetImageGallery';
 
 const PrivateJets = () => {
   const [selectedJet, setSelectedJet] = useState<any>(null);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [galleryJet, setGalleryJet] = useState<any>(null);
   
   const isEliteMember = localStorage.getItem('eliteChipMember') === 'true';
   
@@ -167,6 +171,11 @@ const PrivateJets = () => {
     setIsBookingOpen(true);
   };
   
+  const handleOpenGallery = (jet: any) => {
+    setGalleryJet(jet);
+    setIsGalleryOpen(true);
+  };
+  
   return (
     <section className="py-16 px-4 md:px-6">
       <div className="container mx-auto">
@@ -197,16 +206,22 @@ const PrivateJets = () => {
               }`}
             >
               <div className="relative h-56 group overflow-hidden">
-                <img src={jet.image} alt={jet.name} className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105" />
+                <img 
+                  src={jet.image} 
+                  alt={jet.name} 
+                  className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 cursor-pointer" 
+                  onClick={() => handleOpenGallery(jet)}
+                />
                 
-                <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                  <div className="flex space-x-2">
-                    {jet.galleryImages && jet.galleryImages.map((image, index) => (
-                      <div key={index} className="w-16 h-16 rounded-md overflow-hidden border-2 border-white hover:border-[#6E59A5] transition-all duration-200">
-                        <img src={image} alt={`${jet.name} interior ${index + 1}`} className="w-full h-full object-cover" />
-                      </div>
-                    ))}
-                  </div>
+                <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                  <Button 
+                    variant="secondary" 
+                    className="flex items-center gap-2"
+                    onClick={() => handleOpenGallery(jet)}
+                  >
+                    <Image className="h-4 w-4" />
+                    View Images
+                  </Button>
                 </div>
                 
                 {isEliteMember && (
@@ -235,7 +250,7 @@ const PrivateJets = () => {
                   </div>
                 </div>
                 
-                <div className="flex justify-between items-center mt-5">
+                <div className="flex flex-wrap justify-between items-center mt-5 gap-2">
                   <div>
                     <p className="text-xs text-gray-500">Starting from</p>
                     <p className={`text-xl font-bold ${isEliteMember ? 'text-[#6E59A5]' : 'text-gray-900'}`}>
@@ -251,6 +266,25 @@ const PrivateJets = () => {
                     <ArrowRight className="ml-1 h-4 w-4" />
                   </Button>
                 </div>
+                
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {jet.galleryImages && jet.galleryImages.map((image: string, index: number) => (
+                    <div 
+                      key={index}
+                      className="w-14 h-14 rounded-md overflow-hidden cursor-pointer hover:opacity-80 transition-opacity border border-gray-200"
+                      onClick={() => {
+                        setGalleryJet({...jet, initialImageIndex: index});
+                        setIsGalleryOpen(true);
+                      }}
+                    >
+                      <img 
+                        src={image} 
+                        alt={`${jet.name} thumbnail ${index + 1}`} 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           ))}
@@ -262,6 +296,15 @@ const PrivateJets = () => {
           jet={selectedJet} 
           isOpen={isBookingOpen}
           onClose={() => setIsBookingOpen(false)}
+        />
+      )}
+      
+      {galleryJet && isGalleryOpen && (
+        <JetImageGallery
+          isOpen={isGalleryOpen}
+          onClose={() => setIsGalleryOpen(false)}
+          images={galleryJet.galleryImages || [galleryJet.image]}
+          jetName={galleryJet.name}
         />
       )}
     </section>
