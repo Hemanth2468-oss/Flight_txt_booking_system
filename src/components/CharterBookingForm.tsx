@@ -72,7 +72,7 @@ const CharterBookingForm = ({ jet, isOpen, onClose }: CharterBookingFormProps) =
       phone: "",
       departure: "",
       destination: "",
-      passengers: String(1),
+      passengers: "1", // Note: This is a string now, not a number
       specialRequests: "",
     },
   });
