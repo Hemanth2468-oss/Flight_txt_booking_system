@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,7 +15,6 @@ import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import PremiumTicket from './PremiumTicket';
 
-// Form validation schema
 const formSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
   lastName: z.string().min(2, "Last name must be at least 2 characters"),
@@ -57,13 +55,13 @@ const CharterBookingForm = ({ jet, isOpen, onClose }: CharterBookingFormProps) =
   const [bookingDetails, setBookingDetails] = useState<any>(null);
   const { toast } = useToast();
   
-  // Generate booking number
   const generateBookingNumber = () => {
     return 'EL' + Math.floor(100000 + Math.random() * 900000);
   };
   
-  // Initialize form
-  const form = useForm<z.infer<typeof formSchema>>({
+  type FormValues = z.infer<typeof formSchema>;
+  
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       firstName: "",
@@ -72,13 +70,12 @@ const CharterBookingForm = ({ jet, isOpen, onClose }: CharterBookingFormProps) =
       phone: "",
       departure: "",
       destination: "",
-      passengers: "1", // Note: This is a string now, not a number
+      passengers: "1",
       specialRequests: "",
-    },
+    } as Partial<FormValues>,
   });
   
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    // Create booking details
     const booking = {
       ...values,
       bookingNumber: generateBookingNumber(),
