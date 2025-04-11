@@ -110,81 +110,87 @@ const Navbar = () => {
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <Button 
-                    variant="ghost" 
-                    className={cn(
-                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                      isHomePage && "bg-accent/50 text-accent-foreground"
-                    )}
-                    onClick={() => handleNavigation('/')}
-                  >
-                    Home
-                  </Button>
+                  <Link to="/">
+                    <Button 
+                      variant="ghost" 
+                      className={cn(
+                        "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                        isHomePage && "bg-accent/50 text-accent-foreground"
+                      )}
+                    >
+                      Home
+                    </Button>
+                  </Link>
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <Button 
-                    variant="ghost" 
-                    className={cn(
-                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                      location.pathname === '/flights' && "bg-accent/50 text-accent-foreground"
-                    )}
-                    onClick={() => handleNavigation('/flights')}
-                  >
-                    Flights
-                  </Button>
+                  <Link to="/flights">
+                    <Button 
+                      variant="ghost" 
+                      className={cn(
+                        "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                        location.pathname === '/flights' && "bg-accent/50 text-accent-foreground"
+                      )}
+                    >
+                      Flights
+                    </Button>
+                  </Link>
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <Button 
-                    variant="ghost" 
-                    className={cn(
-                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                      location.pathname === '/deals' && "bg-accent/50 text-accent-foreground"
-                    )}
-                    onClick={() => handleNavigation('/deals')}
-                  >
-                    Deals
-                  </Button>
+                  <Link to="/deals">
+                    <Button 
+                      variant="ghost" 
+                      className={cn(
+                        "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                        location.pathname === '/deals' && "bg-accent/50 text-accent-foreground"
+                      )}
+                    >
+                      Deals
+                    </Button>
+                  </Link>
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
-                  <Button 
-                    variant="ghost" 
-                    className={cn(
-                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                      location.pathname === '/private-jets' && "bg-accent/50 text-accent-foreground"
-                    )}
-                    onClick={() => handleNavigation('/private-jets')}
-                  >
-                    Private Jets
-                  </Button>
+                  <Link to="/private-jets">
+                    <Button 
+                      variant="ghost" 
+                      className={cn(
+                        "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                        location.pathname === '/private-jets' && "bg-accent/50 text-accent-foreground"
+                      )}
+                    >
+                      Private Jets
+                    </Button>
+                  </Link>
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <Button 
-                    variant="ghost" 
-                    className={cn(
-                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                      location.pathname === '/about' && "bg-accent/50 text-accent-foreground"
-                    )}
-                    onClick={() => handleNavigation('/about')}
-                  >
-                    About Us
-                  </Button>
+                  <Link to="/about">
+                    <Button 
+                      variant="ghost" 
+                      className={cn(
+                        "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                        location.pathname === '/about' && "bg-accent/50 text-accent-foreground"
+                      )}
+                    >
+                      About Us
+                    </Button>
+                  </Link>
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <Button 
-                    variant="ghost" 
-                    className={cn(
-                      "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                      location.pathname === '/contact' && "bg-accent/50 text-accent-foreground"
-                    )}
-                    onClick={() => handleNavigation('/contact')}
-                  >
-                    Contact
-                  </Button>
+                  <Link to="/contact">
+                    <Button 
+                      variant="ghost" 
+                      className={cn(
+                        "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                        location.pathname === '/contact' && "bg-accent/50 text-accent-foreground"
+                      )}
+                    >
+                      Contact
+                    </Button>
+                  </Link>
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem className="ml-2">

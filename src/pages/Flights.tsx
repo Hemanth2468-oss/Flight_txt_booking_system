@@ -15,6 +15,12 @@ const Flights = () => {
   // Scroll to top when the component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    // Check if we have search data
+    const searchData = localStorage.getItem('flyEliteSearchData');
+    if (!searchData) {
+      console.log('No search data found, but continuing to show flights');
+    }
   }, []);
   
   // Get promo code from URL parameters if it exists
