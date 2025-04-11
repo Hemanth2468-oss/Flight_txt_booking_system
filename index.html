@@ -1,26 +1,822 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>skyjourney-buddy</title>
-    <meta name="description" content="Lovable Generated Project" />
-    <meta name="author" content="Lovable" />
+    <title>SkyJourney Buddy</title>
+    <meta name="description" content="Experience the Joy of Premium Travel" />
 
-    <meta property="og:title" content="Lovable Generated Project" />
-    <meta property="og:description" content="Lovable Generated Project" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-icons@latest/dist/umd/lucide.css">
   </head>
-
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Header/Navigation goes here -->
+      <header class="header">
+        <div class="container">
+          <nav class="navbar">
+            <div class="logo">
+              <img src="https://public.readdy.ai/ai/img_res/7ddf678232c28e734c97b1d59b4477a9.jpg" alt="FlyElite Logo" class="logo-img">
+              <span class="logo-text">FlyElite</span>
+            </div>
+            <div class="nav-links">
+              <a href="#" class="nav-link active">Home</a>
+              <a href="#" class="nav-link">Flights</a>
+              <a href="#" class="nav-link">Charter</a>
+              <a href="#" class="nav-link">About</a>
+              <a href="#" class="nav-link">Contact</a>
+            </div>
+            <div class="auth-buttons">
+              <button class="elite-chip-btn">
+                <svg class="lucide lucide-shield"><use href="#shield"></use></svg>
+                <span>Elite Chip</span>
+                <div class="exit-btn" title="Exit Elite Membership">
+                  <svg class="lucide lucide-log-out"><use href="#log-out"></use></svg>
+                </div>
+              </button>
+            </div>
+          </nav>
+        </div>
+      </header>
+
+      <!-- Hero Section -->
+      <section class="hero">
+        <div class="hero-background">
+          <img src="https://public.readdy.ai/ai/img_res/7ddf678232c28e734c97b1d59b4477a9.jpg" alt="Airplane view" class="hero-image">
+          <div class="hero-overlay"></div>
+        </div>
+        <div class="container">
+          <div class="hero-content">
+            <h1 class="hero-title">Experience the Joy of Premium Travel</h1>
+            <p class="hero-subtitle">Find and book the perfect flight to your dream destination</p>
+          </div>
+          
+          <!-- Search Form -->
+          <div class="search-form">
+            <div class="search-tabs">
+              <button class="search-tab active">Round Trip</button>
+              <button class="search-tab">One Way</button>
+              <button class="search-tab">Multi-City</button>
+            </div>
+            <div class="search-fields">
+              <div class="search-field">
+                <label>From</label>
+                <div class="input-wrapper">
+                  <svg class="lucide lucide-plane"><use href="#plane"></use></svg>
+                  <input type="text" placeholder="City or Airport">
+                </div>
+              </div>
+              <div class="search-field">
+                <label>To</label>
+                <div class="input-wrapper">
+                  <svg class="lucide lucide-plane-landing"><use href="#plane-landing"></use></svg>
+                  <input type="text" placeholder="City or Airport">
+                </div>
+              </div>
+              <div class="search-field">
+                <label>Departure</label>
+                <div class="input-wrapper">
+                  <svg class="lucide lucide-calendar"><use href="#calendar"></use></svg>
+                  <input type="date">
+                </div>
+              </div>
+              <div class="search-field">
+                <label>Return</label>
+                <div class="input-wrapper">
+                  <svg class="lucide lucide-calendar"><use href="#calendar"></use></svg>
+                  <input type="date">
+                </div>
+              </div>
+              <div class="search-field">
+                <label>Passengers</label>
+                <div class="input-wrapper passenger-selector">
+                  <svg class="lucide lucide-user"><use href="#user"></use></svg>
+                  <span>1 Passenger, Economy</span>
+                </div>
+              </div>
+            </div>
+            <button class="search-button">Search Flights</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features Section -->
+      <section class="features">
+        <div class="container">
+          <div class="features-grid">
+            <div class="feature">
+              <div class="feature-icon">
+                <svg class="lucide lucide-calendar-clock"><use href="#calendar-clock"></use></svg>
+              </div>
+              <h3 class="feature-title">Price Calendar</h3>
+              <p class="feature-description">Find the best fares across dates</p>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">
+                <svg class="lucide lucide-plane"><use href="#plane"></use></svg>
+              </div>
+              <h3 class="feature-title">Flight Status</h3>
+              <p class="feature-description">Track your flight in real-time</p>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">
+                <svg class="lucide lucide-tag"><use href="#tag"></use></svg>
+              </div>
+              <h3 class="feature-title">Special Offers</h3>
+              <p class="feature-description">Exclusive deals and discounts</p>
+            </div>
+            <div class="feature">
+              <div class="feature-icon">
+                <svg class="lucide lucide-headphones"><use href="#headphones"></use></svg>
+              </div>
+              <h3 class="feature-title">24/7 Support</h3>
+              <p class="feature-description">Here to help anytime</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Destinations Section -->
+      <section class="destinations">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="section-title">Popular Destinations</h2>
+            <p class="section-subtitle">Explore our most popular flight destinations with exclusive deals</p>
+          </div>
+          <div class="destinations-grid">
+            <div class="destination-card">
+              <div class="destination-image">
+                <img src="https://public.readdy.ai/ai/img_res/527789f1559591b8e6660ed36d8e52e9.jpg" alt="Paris, France">
+                <div class="destination-overlay"></div>
+                <div class="destination-badge">Featured</div>
+              </div>
+              <div class="destination-content">
+                <h3 class="destination-title">Paris, <span>France</span></h3>
+                <p class="destination-description">Experience the city of love and lights</p>
+                <div class="destination-footer">
+                  <span class="destination-price">From $299</span>
+                  <button class="book-button">Book Now</button>
+                </div>
+              </div>
+            </div>
+            <div class="destination-card">
+              <div class="destination-image">
+                <img src="https://public.readdy.ai/ai/img_res/e201c56399b1bf78a46e27bfe2405578.jpg" alt="Tokyo, Japan">
+                <div class="destination-overlay"></div>
+                <div class="destination-badge">Featured</div>
+              </div>
+              <div class="destination-content">
+                <h3 class="destination-title">Tokyo, <span>Japan</span></h3>
+                <p class="destination-description">Discover the blend of tradition and future</p>
+                <div class="destination-footer">
+                  <span class="destination-price">From $499</span>
+                  <button class="book-button">Book Now</button>
+                </div>
+              </div>
+            </div>
+            <div class="destination-card">
+              <div class="destination-image">
+                <img src="https://public.readdy.ai/ai/img_res/767880d6ed5f93d651016180d26b925c.jpg" alt="New York, USA">
+                <div class="destination-overlay"></div>
+                <div class="destination-badge">Featured</div>
+              </div>
+              <div class="destination-content">
+                <h3 class="destination-title">New York, <span>USA</span></h3>
+                <p class="destination-description">The city that never sleeps awaits</p>
+                <div class="destination-footer">
+                  <span class="destination-price">From $399</span>
+                  <button class="book-button">Book Now</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Benefits Section -->
+      <section class="benefits">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="section-title">Why Choose Fly Elite</h2>
+            <p class="section-subtitle">We provide premium service with attention to every detail of your journey</p>
+          </div>
+          <div class="benefits-grid">
+            <div class="benefit-card">
+              <div class="benefit-icon">
+                <svg class="lucide lucide-shield-check"><use href="#shield-check"></use></svg>
+              </div>
+              <h3 class="benefit-title">Secure Booking</h3>
+              <p class="benefit-description">Your personal and payment information is always protected with advanced encryption.</p>
+            </div>
+            <div class="benefit-card">
+              <div class="benefit-icon">
+                <svg class="lucide lucide-clock"><use href="#clock"></use></svg>
+              </div>
+              <h3 class="benefit-title">24/7 Support</h3>
+              <p class="benefit-description">Our customer service team is available around the clock to assist with any needs.</p>
+            </div>
+            <div class="benefit-card">
+              <div class="benefit-icon">
+                <svg class="lucide lucide-credit-card"><use href="#credit-card"></use></svg>
+              </div>
+              <h3 class="benefit-title">Flexible Payment</h3>
+              <p class="benefit-description">Choose from multiple payment options and pay in installments for select flights.</p>
+            </div>
+            <div class="benefit-card">
+              <div class="benefit-icon">
+                <svg class="lucide lucide-award"><use href="#award"></use></svg>
+              </div>
+              <h3 class="benefit-title">Premium Experience</h3>
+              <p class="benefit-description">Enjoy exclusive benefits, loyalty rewards, and a hassle-free travel experience.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Private Jets Section -->
+      <section class="private-jets">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="section-title">Charter Private Jets</h2>
+            <p class="section-subtitle">Experience the ultimate luxury in air travel with our exclusive private jet fleet</p>
+          </div>
+          
+          <div class="jets-grid">
+            <div class="jet-card">
+              <div class="jet-image">
+                <img src="https://public.readdy.ai/ai/img_res/ef172d45c5dfadabe598b1de58f88aff.jpg" alt="Citation X">
+                <button class="gallery-button">
+                  <svg class="lucide lucide-image"><use href="#image"></use></svg>
+                  <span>View Gallery</span>
+                </button>
+              </div>
+              <div class="jet-content">
+                <h3 class="jet-title">Citation X</h3>
+                <p class="jet-description">One of the fastest private jets, perfect for executives who need to travel quickly.</p>
+                <ul class="jet-features">
+                  <li>
+                    <svg class="lucide lucide-users"><use href="#users"></use></svg>
+                    <span>8 Passengers</span>
+                  </li>
+                  <li>
+                    <svg class="lucide lucide-globe"><use href="#globe"></use></svg>
+                    <span>3,700 miles</span>
+                  </li>
+                  <li>
+                    <svg class="lucide lucide-gauge"><use href="#gauge"></use></svg>
+                    <span>Mach 0.935</span>
+                  </li>
+                </ul>
+                <div class="jet-footer">
+                  <div class="jet-price">$15,300/hour</div>
+                  <button class="charter-button">Book Charter</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="jet-card">
+              <div class="jet-image">
+                <img src="https://public.readdy.ai/ai/img_res/89aba3c9dcdb267ed0b2b8c02e18f76e.jpg" alt="Gulfstream G650">
+                <button class="gallery-button">
+                  <svg class="lucide lucide-image"><use href="#image"></use></svg>
+                  <span>View Gallery</span>
+                </button>
+              </div>
+              <div class="jet-content">
+                <h3 class="jet-title">Gulfstream G650</h3>
+                <p class="jet-description">Ultra-long-range jet offering exceptional comfort and performance for intercontinental travel.</p>
+                <ul class="jet-features">
+                  <li>
+                    <svg class="lucide lucide-users"><use href="#users"></use></svg>
+                    <span>14 Passengers</span>
+                  </li>
+                  <li>
+                    <svg class="lucide lucide-globe"><use href="#globe"></use></svg>
+                    <span>7,500 miles</span>
+                  </li>
+                  <li>
+                    <svg class="lucide lucide-gauge"><use href="#gauge"></use></svg>
+                    <span>Mach 0.925</span>
+                  </li>
+                </ul>
+                <div class="jet-footer">
+                  <div class="jet-price">$12,750/hour</div>
+                  <button class="charter-button">Book Charter</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="view-more-container">
+            <button class="view-more-button">View More Jets</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- App Promo Section -->
+      <section class="app-promo">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="section-title">Download Our App</h2>
+            <p class="section-subtitle">Get exclusive mobile-only deals and manage your trips on the go</p>
+          </div>
+          
+          <div class="app-promo-card">
+            <div class="app-promo-content">
+              <h3 class="app-promo-title">Book on the go with our mobile app</h3>
+              <p class="app-promo-description">Access exclusive mobile-only deals, receive real-time flight alerts, and manage your bookings with ease—all from your smartphone.</p>
+              <div class="app-store-buttons">
+                <button class="app-store-button">
+                  <svg class="lucide lucide-apple"><use href="#apple"></use></svg>
+                  <div class="button-text">
+                    <span class="small-text">Download on the</span>
+                    <span class="large-text">App Store</span>
+                  </div>
+                </button>
+                <button class="app-store-button">
+                  <svg class="lucide lucide-smartphone"><use href="#smartphone"></use></svg>
+                  <div class="button-text">
+                    <span class="small-text">Get it on</span>
+                    <span class="large-text">Google Play</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+            <div class="app-promo-image">
+              <img src="https://public.readdy.ai/ai/img_res/c27475acad630475743a35ff04f8918f.jpg" alt="Mobile App">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Partners Section -->
+      <section class="partners">
+        <div class="container">
+          <h2 class="section-title">Our Trusted Partners</h2>
+          <div class="partners-grid">
+            <div class="partner">
+              <img src="https://public.readdy.ai/ai/img_res/053291d09389daef261bdbc06ca33961.jpg" alt="Partner 1">
+            </div>
+            <div class="partner">
+              <img src="https://public.readdy.ai/ai/img_res/75a6256134458ed047974a284ea61a7d.jpg" alt="Partner 2">
+            </div>
+            <div class="partner">
+              <img src="https://public.readdy.ai/ai/img_res/4008b11c4dcc2594a99cba78207bde87.jpg" alt="Partner 3">
+            </div>
+            <div class="partner">
+              <img src="https://public.readdy.ai/ai/img_res/aac519e36188876136bd69fa45859f05.jpg" alt="Partner 4">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="container">
+          <div class="footer-grid">
+            <div class="footer-column">
+              <h3 class="footer-title">About Us</h3>
+              <ul class="footer-links">
+                <li><a href="#">Company</a></li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#">Press</a></li>
+                <li><a href="#">Blog</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h3 class="footer-title">Support</h3>
+              <ul class="footer-links">
+                <li><a href="#">Help Center</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h3 class="footer-title">Services</h3>
+              <ul class="footer-links">
+                <li><a href="#">Flight Booking</a></li>
+                <li><a href="#">Flight Insurance</a></li>
+                <li><a href="#">Airport Transfer</a></li>
+                <li><a href="#">Group Booking</a></li>
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h3 class="footer-title">Newsletter</h3>
+              <p class="footer-text">Subscribe to get special offers and updates</p>
+              <div class="newsletter-form">
+                <input type="email" placeholder="Your email" class="newsletter-input">
+                <button class="newsletter-button">
+                  <svg class="lucide lucide-send"><use href="#send"></use></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="footer-bottom">
+            <p class="copyright">&copy; 2025 Fly Elite. All rights reserved.</p>
+            <div class="social-links">
+              <a href="#" class="social-link">
+                <svg class="lucide lucide-facebook"><use href="#facebook"></use></svg>
+              </a>
+              <a href="#" class="social-link">
+                <svg class="lucide lucide-twitter"><use href="#twitter"></use></svg>
+              </a>
+              <a href="#" class="social-link">
+                <svg class="lucide lucide-instagram"><use href="#instagram"></use></svg>
+              </a>
+              <a href="#" class="social-link">
+                <svg class="lucide lucide-linkedin"><use href="#linkedin"></use></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+      <!-- Jet Image Gallery Modal -->
+      <div class="jet-gallery-modal" id="jetGalleryModal">
+        <div class="gallery-content">
+          <button class="close-button">
+            <svg class="lucide lucide-x"><use href="#x"></use></svg>
+          </button>
+          
+          <div class="gallery-main">
+            <img src="" alt="Jet Image" class="gallery-main-image">
+            
+            <button class="gallery-nav prev">
+              <svg class="lucide lucide-chevron-left"><use href="#chevron-left"></use></svg>
+            </button>
+            <button class="gallery-nav next">
+              <svg class="lucide lucide-chevron-right"><use href="#chevron-right"></use></svg>
+            </button>
+            
+            <div class="gallery-caption">
+              <h3 class="jet-name"></h3>
+              <p class="image-count"></p>
+            </div>
+          </div>
+          
+          <div class="gallery-thumbnails"></div>
+        </div>
+      </div>
+
+      <!-- Charter Booking Modal -->
+      <div class="charter-modal" id="charterModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title">Book Your Charter Flight</h2>
+            <button class="close-button">
+              <svg class="lucide lucide-x"><use href="#x"></use></svg>
+            </button>
+          </div>
+          
+          <div class="modal-body">
+            <div class="jet-info">
+              <img src="" alt="Jet" class="jet-thumbnail">
+              <div>
+                <h3 class="jet-title"></h3>
+                <p class="jet-price"></p>
+                <p class="jet-capacity"></p>
+              </div>
+            </div>
+            
+            <form class="charter-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>First Name</label>
+                  <input type="text" placeholder="John">
+                </div>
+                <div class="form-group">
+                  <label>Last Name</label>
+                  <input type="text" placeholder="Doe">
+                </div>
+              </div>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Email</label>
+                  <input type="email" placeholder="john@example.com">
+                </div>
+                <div class="form-group">
+                  <label>Phone</label>
+                  <input type="tel" placeholder="1234567890">
+                </div>
+              </div>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Departure Location</label>
+                  <input type="text" placeholder="City or Airport">
+                </div>
+                <div class="form-group">
+                  <label>Destination</label>
+                  <input type="text" placeholder="City or Airport">
+                </div>
+              </div>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Departure Date</label>
+                  <input type="date">
+                </div>
+                <div class="form-group">
+                  <label>Return Date (Optional)</label>
+                  <input type="date">
+                </div>
+              </div>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Number of Passengers</label>
+                  <input type="number" min="1" value="1">
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label>Special Requests</label>
+                <textarea placeholder="Any special requirements or preferences..."></textarea>
+              </div>
+              
+              <div class="form-actions">
+                <button type="button" class="cancel-button">Cancel</button>
+                <button type="submit" class="submit-button">Book Charter</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Elite Chip Modal -->
+      <div class="elite-chip-modal" id="eliteChipModal">
+        <div class="modal-content">
+          <button class="close-button">
+            <svg class="lucide lucide-x"><use href="#x"></use></svg>
+          </button>
+          
+          <div class="modal-step step-1">
+            <div class="modal-header">
+              <h2 class="modal-title">
+                <svg class="lucide lucide-crown"><use href="#crown"></use></svg>
+                <span>FlyElite's Elite Chip Program</span>
+              </h2>
+              <p class="modal-description">Join our premium loyalty program and enjoy exclusive benefits on all your flights.</p>
+            </div>
+            
+            <div class="elite-card">
+              <div class="elite-card-header">
+                <div>
+                  <h3>ELITE CHIP</h3>
+                  <p>Premium Membership</p>
+                </div>
+                <svg class="lucide lucide-badge"><use href="#badge"></use></svg>
+              </div>
+              
+              <div class="elite-card-name">
+                <p>Member Name</p>
+                <p>YOUR NAME</p>
+              </div>
+              
+              <div class="elite-card-footer">
+                <div>
+                  <p>Member Since</p>
+                  <p>APR 2025</p>
+                </div>
+                <div>
+                  <p>Card Number</p>
+                  <p>ELITE ****</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="elite-benefits">
+              <h3>Elite Chip Benefits</h3>
+              <div class="benefits-grid">
+                <div class="benefit">
+                  <svg class="lucide lucide-star"><use href="#star"></use></svg>
+                  <p>Priority check-in and boarding</p>
+                </div>
+                <div class="benefit">
+                  <svg class="lucide lucide-star"><use href="#star"></use></svg>
+                  <p>Extra baggage allowance</p>
+                </div>
+                <div class="benefit">
+                  <svg class="lucide lucide-star"><use href="#star"></use></svg>
+                  <p>Access to premium lounges</p>
+                </div>
+                <div class="benefit">
+                  <svg class="lucide lucide-star"><use href="#star"></use></svg>
+                  <p>Dedicated customer support</p>
+                </div>
+                <div class="benefit">
+                  <svg class="lucide lucide-star"><use href="#star"></use></svg>
+                  <p>Special discounts on flights</p>
+                </div>
+                <div class="benefit">
+                  <svg class="lucide lucide-star"><use href="#star"></use></svg>
+                  <p>Free seat selection</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="modal-actions">
+              <button class="secondary-button">Maybe Later</button>
+              <button class="primary-button continue-button">
+                <svg class="lucide lucide-sparkles"><use href="#sparkles"></use></svg>
+                Continue
+              </button>
+            </div>
+          </div>
+          
+          <div class="modal-step step-2" style="display: none;">
+            <div class="modal-header">
+              <h2 class="modal-title">
+                <svg class="lucide lucide-crown"><use href="#crown"></use></svg>
+                <span>Join Elite Chip</span>
+              </h2>
+              <p class="modal-description">Please fill in your details to complete your Elite Chip membership registration.</p>
+            </div>
+            
+            <form class="elite-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>First Name</label>
+                  <input type="text" placeholder="John">
+                </div>
+                <div class="form-group">
+                  <label>Last Name</label>
+                  <input type="text" placeholder="Doe">
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" placeholder="john.doe@example.com">
+              </div>
+              
+              <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" placeholder="1234567890">
+              </div>
+              
+              <div class="modal-actions">
+                <button type="button" class="secondary-button back-button">Back</button>
+                <button type="submit" class="gold-button">
+                  <svg class="lucide lucide-sparkles"><use href="#sparkles"></use></svg>
+                  Join Elite Chip
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- SVG Icons -->
+      <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="shield" viewBox="0 0 24 24">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="log-out" viewBox="0 0 24 24">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="plane" viewBox="0 0 24 24">
+          <path d="M17.8 19.2L16 11l3.5-3.5a2.1 2.1 0 0 0 0-3 2.1 2.1 0 0 0-3 0L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5-.2.5-.1 1 .3 1.3L8 12l-3.5 3.5c-.4.4-.5.9-.3 1.4.3.4.7.6 1.1.5L12 16l3.5 4a1 1 0 0 0 1.4-.3c.2-.5.1-.9-.3-1.2z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="plane-landing" viewBox="0 0 24 24">
+          <path d="M2 22h20M3.52 15.84l2.95-2.95M2 9l20 9-8-4.5M14 10l6-3" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="calendar" viewBox="0 0 24 24">
+          <rect width="18" height="18" x="3" y="4" rx="2" ry="2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <line x1="16" x2="16" y1="2" y2="6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <line x1="8" x2="8" y1="2" y2="6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <line x1="3" x2="21" y1="10" y2="10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="user" viewBox="0 0 24 24">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <circle cx="12" cy="7" r="4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="calendar-clock" viewBox="0 0 24 24">
+          <path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <path d="M16 2v4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <path d="M8 2v4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <path d="M3 10h18" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <circle cx="16" cy="16" r="6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <path d="M18 16h-2v-2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="tag" viewBox="0 0 24 24">
+          <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <line x1="7" y1="7" x2="7.01" y2="7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="headphones" viewBox="0 0 24 24">
+          <path d="M3 18v-6a9 9 0 0 1 18 0v6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="shield-check" viewBox="0 0 24 24">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <path d="m9 12 2 2 4-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="clock" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <polyline points="12 6 12 12 16 14" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="credit-card" viewBox="0 0 24 24">
+          <rect width="20" height="14" x="2" y="5" rx="2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <line x1="2" x2="22" y1="10" y2="10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="award" viewBox="0 0 24 24">
+          <circle cx="12" cy="8" r="7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="image" viewBox="0 0 24 24">
+          <rect width="18" height="18" x="3" y="3" rx="2" ry="2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <polyline points="21 15 16 10 5 21" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="users" viewBox="0 0 24 24">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <circle cx="9" cy="7" r="4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="globe" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <line x1="2" x2="22" y1="12" y2="12" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="gauge" viewBox="0 0 24 24">
+          <path d="m12 14 4-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <circle cx="12" cy="14" r="1" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <path d="M16 8h-2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <path d="M10 8H8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <path d="M16 16h-2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <path d="M10 16H8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <path d="M12 10V8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <path d="M12 16v-2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="apple" viewBox="0 0 24 24">
+          <path d="M12 20.94c1.5 0 2.75-.75 4-1.5 1.25-.76 2.25-2 3-3.75-1.5-.5-2.75-1.5-3.5-3-2.25 1.75-4.75 1.5-7 .25-.75 1.75-1 3.25-.5 5.5.5 2 1.75 2.5 4 2.5zM8.5 2c-.25 1.25.25 2.5 1 3.5.75 1 2 1.75 3.5 1.5.25-1-.25-2.25-1-3.25-.75-1-2-1.75-3.5-1.75z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="smartphone" viewBox="0 0 24 24">
+          <rect width="14" height="20" x="5" y="2" rx="2" ry="2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <line x1="12" x2="12.01" y1="18" y2="18" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="send" viewBox="0 0 24 24">
+          <polyline points="22 2 11 13 2 9 9 2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <polyline points="22 2 15 22 11 13 2 9" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="facebook" viewBox="0 0 24 24">
+          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="twitter" viewBox="0 0 24 24">
+          <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="instagram" viewBox="0 0 24 24">
+          <rect width="20" height="20" x="2" y="2" rx="5" ry="5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="linkedin" viewBox="0 0 24 24">
+          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <rect width="4" height="12" x="2" y="9" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <circle cx="4" cy="4" r="2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="x" viewBox="0 0 24 24">
+          <line x1="18" x2="6" y1="6" y2="18" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <line x1="6" x2="18" y1="6" y2="18" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="chevron-left" viewBox="0 0 24 24">
+          <polyline points="15 18 9 12 15 6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="chevron-right" viewBox="0 0 24 24">
+          <polyline points="9 18 15 12 9 6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="crown" viewBox="0 0 24 24">
+          <path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <path d="M3 4v16h18V4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="badge" viewBox="0 0 24 24">
+          <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="star" viewBox="0 0 24 24">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+        <symbol id="sparkles" viewBox="0 0 24 24">
+          <path d="M12 3v18" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <path d="m9 5 3-2 3 2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <path d="m9 19-3 2-3-2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <path d="M22 5V3c-3 0-7 1-10 3" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          <path d="M22 21v-2c-3 0-7-1-10-3" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+        </symbol>
+      </svg>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script src="script.js"></script>
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
