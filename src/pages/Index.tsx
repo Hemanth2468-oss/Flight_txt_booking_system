@@ -8,6 +8,9 @@ import Benefits from '../components/Benefits';
 import AppPromo from '../components/AppPromo';
 import Partners from '../components/Partners';
 import Footer from '../components/Footer';
+import Testimonials from '../components/Testimonials';
+import Newsletter from '../components/Newsletter';
+import FAQSection from '../components/FAQSection';
 import { Star, Shield, PlaneTakeoff, Sparkles, LogOut } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 
@@ -114,8 +117,11 @@ const Index = () => {
         <Features />
         <Destinations />
         <Benefits />
+        <Testimonials />
         <AppPromo />
         <Partners />
+        <FAQSection />
+        <Newsletter />
       </main>
       
       <Footer />
