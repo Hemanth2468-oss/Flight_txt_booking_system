@@ -20,6 +20,16 @@ const Flights = () => {
   // Get promo code from URL parameters if it exists
   const urlParams = new URLSearchParams(location.search);
   const promoCode = urlParams.get('promo');
+
+  // Navigation handler
+  const handleBackToSearch = () => {
+    navigate('/');
+  };
+
+  // Navigation to deals page
+  const handleViewAllOffers = () => {
+    navigate('/deals');
+  };
   
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
@@ -30,7 +40,7 @@ const Flights = () => {
           <Button
             variant="outline"
             className="flex items-center gap-2 hover:bg-primary-50 hover:text-primary-600 transition-all"
-            onClick={() => navigate('/')}
+            onClick={handleBackToSearch}
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Search
@@ -48,7 +58,7 @@ const Flights = () => {
             </div>
             <Button
               className="glow-button text-sm px-4 py-1 h-auto"
-              onClick={() => navigate('/deals')}
+              onClick={handleViewAllOffers}
             >
               View All Offers
             </Button>

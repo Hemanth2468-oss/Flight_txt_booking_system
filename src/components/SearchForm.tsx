@@ -1,8 +1,10 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { PlaneIcon, PlaneLanding, Calendar, ArrowLeftRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import PassengerSelector from './PassengerSelector';
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 
 interface Passengers {
   adults: number;
@@ -18,7 +20,7 @@ interface AirportOption {
 }
 
 interface SearchFormProps {
-  onSearch: () => void;
+  onSearch?: () => void;
 }
 
 // Sample airports data with international options
@@ -65,6 +67,7 @@ const SearchForm = ({ onSearch }: SearchFormProps) => {
   const [showToSuggestions, setShowToSuggestions] = useState<boolean>(false);
   const [validationError, setValidationError] = useState<string>('');
   
+  const navigate = useNavigate();
   const { toast } = useToast();
   const fromInputRef = useRef<HTMLInputElement>(null);
   const toInputRef = useRef<HTMLInputElement>(null);
@@ -227,8 +230,13 @@ const SearchForm = ({ onSearch }: SearchFormProps) => {
     localStorage.setItem('flyEliteSearchData', JSON.stringify(searchData));
     console.log('Search data:', searchData);
     
-    // Call the onSearch prop to navigate to the flights page
-    onSearch();
+    // Navigate to flights page
+    navigate('/flights');
+    
+    // Call the onSearch prop if provided (for backward compatibility)
+    if (onSearch) {
+      onSearch();
+    }
   };
 
   const isReturnVisible = tripType === 'roundTrip';
@@ -400,12 +408,12 @@ const SearchForm = ({ onSearch }: SearchFormProps) => {
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <PassengerSelector onChange={handlePassengerChange} />
           
-          <button
+          <Button
             type="submit"
             className="w-full md:w-auto px-8 py-3 bg-primary-600 text-white rounded-button hover:bg-primary-700 transition-all duration-300 shadow-sm hover:shadow flex items-center justify-center gap-2"
           >
             <span>Search Flights</span>
-          </button>
+          </Button>
         </div>
       </form>
     </div>

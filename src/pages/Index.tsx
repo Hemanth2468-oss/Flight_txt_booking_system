@@ -1,5 +1,6 @@
 
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/navbar';
 import Hero from '../components/Hero';
 import Features from '../components/Features';
@@ -15,6 +16,7 @@ import { Star, Shield, PlaneTakeoff, Sparkles, LogOut } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
+  const navigate = useNavigate();
   // Check if user is an Elite member
   const [isEliteMember, setIsEliteMember] = useState(false);
   const [userDetails, setUserDetails] = useState<any>(null);
@@ -51,6 +53,11 @@ const Index = () => {
     
     // Refresh the page to update all components
     window.location.reload();
+  };
+
+  // Handle search form submission
+  const handleSearch = () => {
+    navigate('/flights');
   };
   
   return (
