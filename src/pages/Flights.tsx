@@ -6,15 +6,27 @@ import { Button } from "@/components/ui/button";
 import Navbar from '../components/navbar';
 import FlightResults from '../components/FlightResults';
 import Footer from '../components/Footer';
+import LoginDialog from '../components/navbar/LoginDialog';
 
 const Flights = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [lowestPrice, setLowestPrice] = useState<number | null>(null);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   
-  // Scroll to top when the component mounts
+  // Scroll to top when the component mounts and check login status
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    // Check if user is logged in
+    const user = localStorage.getItem('flyEliteUser');
+    if (user) {
+      setIsUserLoggedIn(true);
+    } else {
+      // Show login dialog if user isn't logged in
+      setIsLoginOpen(true);
+    }
 
     // Check if we have search data
     const searchData = localStorage.getItem('flyEliteSearchData');
@@ -35,6 +47,13 @@ const Flights = () => {
   // Navigation to deals page
   const handleViewAllOffers = () => {
     navigate('/deals');
+  };
+  
+  // Handle login success
+  const handleLogin = (userData: any) => {
+    setIsUserLoggedIn(true);
+    setIsLoginOpen(false);
+    localStorage.setItem('flyEliteUser', JSON.stringify(userData));
   };
   
   return (
@@ -87,6 +106,16 @@ const Flights = () => {
       </main>
       
       <Footer />
+      
+      {/* Login Dialog */}
+      {isLoginOpen && (
+        <LoginDialog 
+          isOpen={isLoginOpen} 
+          setIsOpen={setIsLoginOpen} 
+          setIsRegisterOpen={() => {}} 
+          handleLogin={handleLogin} 
+        />
+      )}
     </div>
   );
 };

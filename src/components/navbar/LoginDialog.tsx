@@ -67,9 +67,6 @@ const LoginDialog = ({ isOpen, setIsOpen, setIsRegisterOpen, handleLogin }: Logi
       
       setIsSubmitting(false);
       setIsOpen(false);
-      
-      // Refresh the page to update UI state
-      window.location.reload();
     }, 1000);
   };
 

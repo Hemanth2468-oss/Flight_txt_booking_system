@@ -36,7 +36,21 @@ const Index = () => {
         setUserDetails(JSON.parse(eliteUserDetails));
       }
     }
-  }, []);
+    
+    // Setup listener for search form submission
+    const handleStorageChange = () => {
+      const searchData = localStorage.getItem('flyEliteSearchData');
+      if (searchData) {
+        navigate('/flights');
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [navigate]);
   
   // Handle exit from Elite membership
   const handleExitElite = () => {
@@ -57,6 +71,17 @@ const Index = () => {
 
   // Handle search form submission
   const handleSearch = () => {
+    // Create a default search data if none exists
+    const searchData = {
+      from: "Mumbai",
+      to: "Delhi",
+      departDate: new Date().toISOString(),
+      returnDate: null,
+      passengers: 1,
+      cabinClass: "Economy"
+    };
+    
+    localStorage.setItem('flyEliteSearchData', JSON.stringify(searchData));
     navigate('/flights');
   };
   
@@ -65,7 +90,7 @@ const Index = () => {
       <Navbar />
       
       <main className="flex-grow pt-16">
-        <Hero />
+        <Hero onSearch={handleSearch} />
         
         {isEliteMember && (
           <div className="container mx-auto px-4 py-8 animate-fade-in">

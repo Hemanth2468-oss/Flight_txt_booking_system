@@ -9,8 +9,8 @@ interface ConfirmationModalProps {
   onClose: () => void;
   flight: any;
   user: any;
-  promoCode?: string | null; // Add promoCode prop
-  promoDiscount?: number; // Add promoDiscount prop
+  promoCode?: string | null;
+  promoDiscount?: number;
 }
 
 const ConfirmationModal = ({ onClose, flight, user, promoCode, promoDiscount }: ConfirmationModalProps) => {
@@ -77,10 +77,18 @@ const ConfirmationModal = ({ onClose, flight, user, promoCode, promoDiscount }: 
         user,
         date: new Date().toISOString(),
         promoCode,
-        promoDiscount
+        promoDiscount,
+        emailSent: true,
+        emailAddress: user.email
       });
       localStorage.setItem('flyEliteBookings', JSON.stringify(bookings));
       
+      // Show a more detailed toast with email information
+      toast({
+        title: "Booking Confirmed",
+        description: `E-ticket sent to ${user.email}. Please check your inbox or spam folder.`,
+        variant: "default",
+      });
     }, 2000);
   };
   

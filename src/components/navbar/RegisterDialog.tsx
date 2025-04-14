@@ -76,9 +76,6 @@ const RegisterDialog = ({ isOpen, setIsOpen, setIsLoginOpen, handleRegister }: R
       
       setIsSubmitting(false);
       setIsOpen(false);
-      
-      // Refresh the page to update UI state
-      window.location.reload();
     }, 1000);
   };
 
