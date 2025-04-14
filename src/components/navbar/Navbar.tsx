@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { MenuIcon, X, PlaneTakeoff } from 'lucide-react';
@@ -28,10 +27,8 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  // Check if user is Elite member
   const isEliteMember = localStorage.getItem('eliteChipMember') === 'true';
   
-  // Check if user is logged in
   useEffect(() => {
     const storedUser = localStorage.getItem('flyEliteUser');
     if (storedUser) {
@@ -39,7 +36,6 @@ const Navbar = () => {
     }
   }, []);
   
-  // Change navbar background when scrolling
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 10) {
@@ -53,26 +49,22 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   
-  // Close mobile menu when changing routes
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
   
   const isHomePage = location.pathname === '/';
   
-  // Handle login function
   const handleLogin = (userData: any) => {
     setUser(userData);
     setIsLoginOpen(false);
   };
   
-  // Handle register function
   const handleRegister = (userData: any) => {
     setUser(userData);
     setIsRegisterOpen(false);
   };
   
-  // Handle logout
   const handleLogout = () => {
     localStorage.removeItem('flyEliteUser');
     setUser(null);
@@ -84,7 +76,6 @@ const Navbar = () => {
     });
   };
 
-  // Navigation handlers
   const handleNavigation = (path: string) => {
     navigate(path);
   };
@@ -97,7 +88,6 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4">
         <nav className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
           <Link to="/" className="flex items-center">
             <PlaneTakeoff className={`h-6 w-6 mr-2 ${isEliteMember ? 'text-[#FFD700]' : 'text-primary-600'}`} />
             <span className={`text-xl font-bold ${isEliteMember ? 'font-serif text-[#FFD700]' : 'text-primary-600'}`}>
@@ -105,7 +95,6 @@ const Navbar = () => {
             </span>
           </Link>
           
-          {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center space-x-1">
             <NavigationMenu>
               <NavigationMenuList>
@@ -138,6 +127,20 @@ const Navbar = () => {
                 </NavigationMenuItem>
                 
                 <NavigationMenuItem>
+                  <Link to="/charter">
+                    <Button 
+                      variant="ghost" 
+                      className={cn(
+                        "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                        location.pathname === '/charter' && "bg-accent/50 text-accent-foreground"
+                      )}
+                    >
+                      Charter
+                    </Button>
+                  </Link>
+                </NavigationMenuItem>
+                
+                <NavigationMenuItem>
                   <Link to="/deals">
                     <Button 
                       variant="ghost" 
@@ -147,20 +150,6 @@ const Navbar = () => {
                       )}
                     >
                       Deals
-                    </Button>
-                  </Link>
-                </NavigationMenuItem>
-                
-                <NavigationMenuItem>
-                  <Link to="/private-jets">
-                    <Button 
-                      variant="ghost" 
-                      className={cn(
-                        "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                        location.pathname === '/private-jets' && "bg-accent/50 text-accent-foreground"
-                      )}
-                    >
-                      Private Jets
                     </Button>
                   </Link>
                 </NavigationMenuItem>
@@ -200,7 +189,6 @@ const Navbar = () => {
             </NavigationMenu>
           </div>
           
-          {/* User Menu */}
           <div className="hidden md:flex items-center space-x-2">
             <UserMenu 
               user={user} 
@@ -210,7 +198,6 @@ const Navbar = () => {
             />
           </div>
           
-          {/* Mobile Menu Toggle */}
           <div className="md:hidden">
             <Button
               variant="ghost"
@@ -228,14 +215,12 @@ const Navbar = () => {
         </nav>
       </div>
       
-      {/* Mobile Menu */}
       {mobileMenuOpen && (
         <MobileMenu 
           onClose={() => setMobileMenuOpen(false)} 
         />
       )}
       
-      {/* Login Dialog */}
       {isLoginOpen && (
         <LoginDialog 
           isOpen={isLoginOpen} 
@@ -245,7 +230,6 @@ const Navbar = () => {
         />
       )}
       
-      {/* Register Dialog */}
       {isRegisterOpen && (
         <RegisterDialog 
           isOpen={isRegisterOpen} 

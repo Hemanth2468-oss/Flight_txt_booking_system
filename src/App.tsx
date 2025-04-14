@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Flights from "./pages/Flights";
 import Deals from "./pages/Deals";
 import PrivateJets from "./pages/PrivateJets";
+import Charter from "./pages/Charter";
 import PreviousWebsites from "./pages/PreviousWebsites";
 import NotFound from "./pages/NotFound";
 import AboutUs from "./pages/AboutUs";
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/flights" element={<Flights />} />
           <Route path="/deals" element={<Deals />} />
           <Route path="/private-jets" element={<PrivateJets />} />
+          <Route path="/charter" element={<Charter />} />
           <Route path="/previous-websites" element={<PreviousWebsites />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<Contact />} />

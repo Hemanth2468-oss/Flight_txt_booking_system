@@ -93,12 +93,12 @@ const MobileMenu = ({ onClose }: MobileMenuProps) => {
                   </li>
                   <li>
                     <Link
-                      to="/private-jets"
+                      to="/charter"
                       onClick={onClose}
                       className={`block py-2 ${isEliteMember ? 'text-white/80 hover:text-[#FFD700]' : 'text-gray-700 hover:text-primary-600'} transition-colors flex items-center gap-2`}
                     >
                       <PlaneTakeoff className="h-4 w-4" />
-                      Private Jets
+                      Charter
                     </Link>
                   </li>
                 </ul>
@@ -111,6 +111,24 @@ const MobileMenu = ({ onClose }: MobileMenuProps) => {
                 className={`block py-2 ${isEliteMember ? 'text-white hover:text-[#FFD700]' : 'text-gray-800 hover:text-primary-600'} transition-colors`}
               >
                 Deals
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/about"
+                onClick={onClose}
+                className={`block py-2 ${isEliteMember ? 'text-white hover:text-[#FFD700]' : 'text-gray-800 hover:text-primary-600'} transition-colors`}
+              >
+                About Us
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/contact"
+                onClick={onClose}
+                className={`block py-2 ${isEliteMember ? 'text-white hover:text-[#FFD700]' : 'text-gray-800 hover:text-primary-600'} transition-colors`}
+              >
+                Contact
               </Link>
             </li>
             <li>

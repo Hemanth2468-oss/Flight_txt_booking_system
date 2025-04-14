@@ -15,6 +15,10 @@ import FAQSection from '../components/FAQSection';
 import { Star, Shield, PlaneTakeoff, Sparkles, LogOut } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 
+interface HeroProps {
+  onSearch: () => void;
+}
+
 const Index = () => {
   const navigate = useNavigate();
   // Check if user is an Elite member
